@@ -1,0 +1,4 @@
+itemselector_controller:
+    resource: "@CPASimUSanteItemSelectorBundle/Controller/ItemSelectorController.php"
+    type: annotation
+    prefix: /

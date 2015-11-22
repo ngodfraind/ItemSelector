@@ -1,0 +1,7 @@
+plugin:
+    has_options: false
+    resources:
+        -
+            class: CPASimUSante\ItemSelectorBundle\Entity\ItemSelector
+            name: cpasimusante_itemselector
+            is_exportable: false
