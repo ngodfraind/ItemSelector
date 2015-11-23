@@ -1,0 +1,11 @@
+services:
+    cpasimusante_itemselector.listener.itemselector:
+        class: %cpasimusante_itemselector.listener.itemselector.class%
+        calls:
+            - [setContainer, ["@service_container"]]
+        tags:
+            - { name: kernel.event_listener, event: create_form_cpasimusante_itemselector,  method: onCreateForm }
+            - { name: kernel.event_listener, event: create_cpasimusante_itemselector,       method: onCreate }
+            - { name: kernel.event_listener, event: delete_cpasimusante_itemselector,       method: onDelete }
+            - { name: kernel.event_listener, event: copy_cpasimusante_itemselector,         method: onCopy }
+            - { name: kernel.event_listener, event: open_cpasimusante_itemselector,         method: onOpen }

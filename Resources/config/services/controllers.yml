@@ -1,0 +1,8 @@
+services:
+    # ItemSelector controller
+    cpasimusante_itemselector.controller.itemselector:
+        class: %cpasimusante_itemselector.controller.itemselector.class%
+#        arguments:
+#            pathManager:       @cpasimusante_itemselector.manager.path
+#            publishingManager: @cpasimusante_itemselector.manager.publishing
+#        scope: request

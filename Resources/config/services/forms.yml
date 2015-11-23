@@ -1,0 +1,6 @@
+services:
+    # Item Selector type
+    cpasimusante_itemselector.form.type.itemselector:
+        class:  %cpasimusante_itemselector.form.type.itemselector.class%
+        tags:
+          - { name: form.type, alias: cpasimusante_itemselector }
