@@ -18,7 +18,7 @@ class ItemSelectorListener extends ContainerAware
     public function onCreateForm(CreateFormResourceEvent $event)
     {
         // Create form
-        $form = $this->container->get('form.factory')->create('cpasimusante_itemselector', new ItemSelector());
+        $form = $this->container->get('form.factory')->create(new ItemSelectorType(), new ItemSelector());
 
         $content = $this->container->get('templating')->render(
             'ClarolineCoreBundle:Resource:createForm.html.twig',
@@ -35,7 +35,7 @@ class ItemSelectorListener extends ContainerAware
     public function onCreate(CreateResourceEvent $event)
     {
         $request = $this->container->get('request');
-        $form = $this->container->get('form.factory')->create('cpasimusante_itemselector', new ItemSelector());
+        $form = $this->container->get('form.factory')->create(new ItemSelectorType(), new ItemSelector());
         $form->handleRequest($request);
 
         if ($form->isValid()) {

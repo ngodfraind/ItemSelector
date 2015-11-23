@@ -22,7 +22,7 @@ class ItemSelector extends AbstractResource
 {
     /**
      *
-     * @ORM\Column(name="code", type="text")
+     * @ORM\Column(name="code", type="text", nullable=true)
      */
     protected $code;
 

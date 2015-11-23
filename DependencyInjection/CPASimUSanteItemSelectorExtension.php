@@ -26,6 +26,7 @@ class CPASimUSanteItemSelectorExtension extends Extension
         $loader = new YamlFileLoader($container, $locator);
 
         //add yml files
+        $loader->load('listeners.yml');
         $loader->load('controllers.yml');
         $loader->load('forms.yml');
 
