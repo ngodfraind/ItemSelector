@@ -14,20 +14,15 @@ class ItemSelectorType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-            ->add('field', 'text', array(
-                'label' => 'field'
-            ))
-            //->add('resourceNode')
-        ;
+        $builder->add('name');
     }
 
-    public function getDefaultOptions()
+    public function configureOptions(OptionsResolver $resolver)
     {
-        return array (
+        $resolver->setDefaults(array(
             'data_class' => 'CPASimUSante\ItemSelectorBundle\Entity\ItemSelector',
             'translation_domain' => 'resource'
-        );
+        ));
     }
 
     /**

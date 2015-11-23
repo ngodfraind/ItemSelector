@@ -12,7 +12,6 @@
 namespace CPASimUSante\ItemSelectorBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
 use Claroline\CoreBundle\Entity\Resource\AbstractResource;
 
 /**
@@ -22,7 +21,73 @@ use Claroline\CoreBundle\Entity\Resource\AbstractResource;
 class ItemSelector extends AbstractResource
 {
     /**
-     * @ORM\Column(name="field_example")
+     *
+     * @ORM\Column(name="code", type="text")
      */
-    protected $field = 'data';
+    protected $code;
+
+    /**
+     * Wiki to select
+     * @var \Claroline\CoreBundle\Entity\Resource\Activity
+     *
+     * @ORM\ManyToOne(targetEntity="Icap\WikiBundle\Entity\Wiki", cascade={"persist"})
+     * @ORM\JoinColumn(name="wiki_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $resource;
+
+    /**
+     * Class constructor
+     */
+    public function __construct()
+    {
+
+    }
+
+    /**
+     * Set code
+     *
+     * @param string $code
+     *
+     * @return ItemSelector
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+
+        return $this;
+    }
+
+    /**
+     * Get code
+     *
+     * @return string
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+    /**
+     * Set resource
+     *
+     * @param \Icap\WikiBundle\Entity\Wiki $resource
+     *
+     * @return ItemSelector
+     */
+    public function setResource(\Icap\WikiBundle\Entity\Wiki $resource = null)
+    {
+        $this->resource = $resource;
+
+        return $this;
+    }
+
+    /**
+     * Get resource
+     *
+     * @return \Icap\WikiBundle\Entity\Wiki
+     */
+    public function getResource()
+    {
+        return $this->resource;
+    }
 }
