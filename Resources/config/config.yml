@@ -6,4 +6,4 @@ plugin:
             class: CPASimUSante\ItemSelectorBundle\Entity\ItemSelector
             name: cpasimusante_itemselector
             is_exportable: false
-            icon: res_simu.png
+            icon: res_simu_si.png
