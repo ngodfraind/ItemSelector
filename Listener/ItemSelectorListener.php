@@ -11,6 +11,7 @@ use Claroline\CoreBundle\Event\DeleteResourceEvent;
 use CPASimUSante\ItemSelectorBundle\Entity\ItemSelector;
 use CPASimUSante\ItemSelectorBundle\Form\ItemSelectorType;
 use Symfony\Component\DependencyInjection\ContainerAware;
+use Symfony\Component\HttpFoundation\Response;
 
 
 class ItemSelectorListener extends ContainerAware
@@ -70,7 +71,13 @@ class ItemSelectorListener extends ContainerAware
 
     public function onOpen(OpenResourceEvent $event)
     {
-        $response = null;
+        $content = $this->container->get('templating')->render(
+            'CPASimUSanteItemSelectorBundle:ItemSelector:index.html.twig',
+            array(
+                '_resource' => $event->getResource()
+            )
+        );
+        $response = new Response($content);
         $event->setResponse($response);
         $event->stopPropagation();
     }

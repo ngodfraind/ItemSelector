@@ -13,6 +13,7 @@ namespace CPASimUSante\ItemSelectorBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Claroline\CoreBundle\Entity\Resource\AbstractResource;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Table(name="cpasimusante__itemselector")
@@ -21,14 +22,15 @@ use Claroline\CoreBundle\Entity\Resource\AbstractResource;
 class ItemSelector extends AbstractResource
 {
     /**
+     * @var Items[]
      *
-     * @ORM\Column(name="code", type="text", nullable=true)
+     * @ORM\OneToMany(targetEntity="CPASimUSante\ItemSelectorBundle\Entity\Item", mappedBy="itemselector", cascade={"all"})
      */
-    protected $code;
+    protected $items;
 
     /**
-     * Wiki to select
-     * @var \Claroline\CoreBundle\Entity\Resource\Activity
+     * Wiki to select = Clinical case...
+     * @var \Icap\WikiBundle\Entity\Wiki
      *
      * @ORM\ManyToOne(targetEntity="Icap\WikiBundle\Entity\Wiki", cascade={"persist"})
      * @ORM\JoinColumn(name="wiki_id", referencedColumnName="id", onDelete="SET NULL")
@@ -40,31 +42,7 @@ class ItemSelector extends AbstractResource
      */
     public function __construct()
     {
-
-    }
-
-    /**
-     * Set code
-     *
-     * @param string $code
-     *
-     * @return ItemSelector
-     */
-    public function setCode($code)
-    {
-        $this->code = $code;
-
-        return $this;
-    }
-
-    /**
-     * Get code
-     *
-     * @return string
-     */
-    public function getCode()
-    {
-        return $this->code;
+        $this->items = new ArrayCollection();
     }
 
     /**
@@ -89,5 +67,39 @@ class ItemSelector extends AbstractResource
     public function getResource()
     {
         return $this->resource;
+    }
+
+    /**
+     * Add item
+     *
+     * @param \CPASimUSante\ItemSelectorBundle\Entity\Item $item
+     *
+     * @return ItemSelector
+     */
+    public function addItem(\CPASimUSante\ItemSelectorBundle\Entity\Item $item)
+    {
+        $this->items[] = $item;
+
+        return $this;
+    }
+
+    /**
+     * Remove item
+     *
+     * @param \CPASimUSante\ItemSelectorBundle\Entity\Item $item
+     */
+    public function removeItem(\CPASimUSante\ItemSelectorBundle\Entity\Item $item)
+    {
+        $this->items->removeElement($item);
+    }
+
+    /**
+     * Get items
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getItems()
+    {
+        return $this->items;
     }
 }
