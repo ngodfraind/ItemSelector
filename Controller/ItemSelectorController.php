@@ -2,9 +2,12 @@
 
 namespace CPASimUSante\ItemSelectorBundle\Controller;
 
+use CPASimUSante\ItemSelectorBundle\Entity\ItemSelector;
+use CPASimUSante\ItemSelectorBundle\Form\ItemSelectorType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration as EXT;
 use Symfony\Component\BrowserKit\Response;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class ItemSelectorController
@@ -27,12 +30,19 @@ use Symfony\Component\BrowserKit\Response;
 class ItemSelectorController extends Controller
 {
     /**
-     * @EXT\Route("/index", name="cpasimusante_itemselector_index")
-     * @return Response
-     * @throws \Exception
+     * @EXT\Route("/choose/{id}", name="cpasimusante_choose_item", requirements={"id" = "\d+"})
+     * @EXT\ParamConverter("itemselector", class="CPASimUSanteItemSelectorBundle:ItemSelector", options={"id" = "id"})
+     * @EXT\Template("CPASimUSanteItemSelectorBundle:ItemSelector:choose.html.twig")
      */
-    public function indexAction()
+    public function chooseAction(ItemSelector $itemSelector)
     {
-        throw new \Exception('hello');
+        //working because call to service_container in controller.yml
+        $form = $this->get('form.factory')
+            ->create(new ItemSelectorType(), $itemSelector);
+
+        return array(
+            '_resource' => $itemSelector,
+            'form'      => $form->createView(),
+        );
     }
 }

@@ -1,2 +1,4 @@
 cpasimusante_itemselector: ItemSelector
 cpasimusante_itemselector_name: 'Name'
+title: 'Name'
+resource_to_open: 'Resource to choose'

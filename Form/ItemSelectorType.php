@@ -14,7 +14,31 @@ class ItemSelectorType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('name');
+        $builder
+            ->add(
+                'name', 'hidden', array(
+                    'data' => 'exercise'
+                )
+            )
+            ->add(
+                'title', 'text', array(
+                    'label' => 'title'
+                )
+            )
+            ->add(
+                'resource',
+                'resourcePicker',
+                array(
+                    'required' => true,
+                    'attr' => array(
+                        'data-is-picker-multi-select-allowed'   => 0,
+                        'data-is-directory-selection-allowed'   => 0,
+                        'data-type-wite-list'                  => 'icap_wiki',
+                        /*'data-restrict-for-owner'               => 0,*/
+                    ),
+                    'label' => 'resource_to_open'
+                )
+            );
     }
 
     public function configureOptions(OptionsResolver $resolver)

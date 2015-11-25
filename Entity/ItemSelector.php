@@ -22,6 +22,13 @@ use Doctrine\Common\Collections\ArrayCollection;
 class ItemSelector extends AbstractResource
 {
     /**
+     * @var string $title
+     *
+     * @ORM\Column(name="title", type="string", length=255)
+     */
+    private $title;
+    
+    /**
      * @var Items[]
      *
      * @ORM\OneToMany(targetEntity="CPASimUSante\ItemSelectorBundle\Entity\Item", mappedBy="itemselector", cascade={"all"})
@@ -31,9 +38,9 @@ class ItemSelector extends AbstractResource
     /**
      * Wiki to select = Clinical case...
      * @var \Icap\WikiBundle\Entity\Wiki
-     *
-     * @ORM\ManyToOne(targetEntity="Icap\WikiBundle\Entity\Wiki", cascade={"persist"})
-     * @ORM\JoinColumn(name="wiki_id", referencedColumnName="id", onDelete="SET NULL")
+     * 
+     * @ORM\ManyToOne(targetEntity="Claroline\CoreBundle\Entity\Resource\ResourceNode", cascade={"persist"})
+     * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
      */
     protected $resource;
 
@@ -45,29 +52,6 @@ class ItemSelector extends AbstractResource
         $this->items = new ArrayCollection();
     }
 
-    /**
-     * Set resource
-     *
-     * @param \Icap\WikiBundle\Entity\Wiki $resource
-     *
-     * @return ItemSelector
-     */
-    public function setResource(\Icap\WikiBundle\Entity\Wiki $resource = null)
-    {
-        $this->resource = $resource;
-
-        return $this;
-    }
-
-    /**
-     * Get resource
-     *
-     * @return \Icap\WikiBundle\Entity\Wiki
-     */
-    public function getResource()
-    {
-        return $this->resource;
-    }
 
     /**
      * Add item
@@ -101,5 +85,53 @@ class ItemSelector extends AbstractResource
     public function getItems()
     {
         return $this->items;
+    }
+
+    /**
+     * Set resource
+     *
+     * @param \Claroline\CoreBundle\Entity\Resource\ResourceNode $resource
+     *
+     * @return ItemSelector
+     */
+    public function setResource(\Claroline\CoreBundle\Entity\Resource\ResourceNode $resource = null)
+    {
+        $this->resource = $resource;
+
+        return $this;
+    }
+
+    /**
+     * Get resource
+     *
+     * @return \Claroline\CoreBundle\Entity\Resource\ResourceNode
+     */
+    public function getResource()
+    {
+        return $this->resource;
+    }
+
+    /**
+     * Set title
+     *
+     * @param string $title
+     *
+     * @return ItemSelector
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    /**
+     * Get title
+     *
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
     }
 }
