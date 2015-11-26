@@ -16,18 +16,29 @@ class ItemType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-
+            ->add(
+                'itemcode', 'entity', array(
+                    'label'         => 'Code',
+                    'class'         => 'CPASimUSanteItemSelectorBundle:ItemSelectorExercise',
+                    'choice_label'  =>'title',
+                    'query_builder' => function(EntityRepository $er) {
+                        return $er->getQbFilteredExercise();
+                    }
+                )
+            );
+/*
             ->add(
                 'itemcode', 'entity', array(
                     'label'         => 'Code',
                     'class'         => 'UJMExoBundle:Exercise',
-                    'property'      =>'title',
+                    'choice_label'  =>'title',
                     'query_builder' => function(EntityRepository $er) {
                         return $er->createQueryBuilder('e')
                             ->orderBy('e.title', 'ASC');
                     }
                 )
             );
+        */
         /*
 
             ->add(
