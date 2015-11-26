@@ -10,38 +10,82 @@
 
 {% block title %}{{ _resource.getResourceNode().getName() | striptags | raw }}{% endblock %}
 
-{% block section_content %}
-    <form action="{{ path('cpasimusante_choose_item', {'id': 1}) }}" method="post" {{ form_enctype(form) }}>
+{% macro isel_prototype(form) %}
+<table class="table">
+    <tr>
+        <td class="isel_label">{{ form_label(form.itemcode) }}</td>
+        <td class="isel_widget">{{ form_widget(form.itemcode) }}</td>
+        <td class="isel_error">{{ form_errors(form.itemcode) }}</td>
+    </tr>
+</table>
+{% endmacro %}
 
+{% block section_content %}
+    <form action="{{ path('cpasimusante_choose_item', {'id': _resource.id}) }}" method="post" {{ form_enctype(form) }}>
+
+    <div class="panel panel-default">
     <div class="panel-heading">
         <h3 class="panel-title">{{ _resource.getResourceNode().getName() }}</h3>
     </div>
     <div class="panel-body" id="text_content">
-        {{ form_widget(form) }}
-          {#  {{ form_row(form.resource) }} #}
-<!--
-            <label class="control-label col-md-4" for="clinical-case">Cas clinique</label>
-            <select class="form-control" id="clinical-case" name="clinical-case">
-                <option value="">Choissisez un cas</option>
-            </select>
--->
-        <label class="control-label col-md-4" for="dfasm">A quels items DFASM correspond-il ?</label>
-        <div id="tableChoice"></div>
 
+        {{ form_row(form.title) }}
+
+        <label class="control-label col-md-4">A quels items DFASM correspond-il ?</label>
+        {#
+        http://stackoverflow.com/questions/7555702/how-to-customize-the-data-prototype-attribute-in-symfony-2-forms
+        http://toni.uebernickel.info/2012/03/15/an-example-of-symfony2-collectiontype-form-field-prototype.html
+
+                    <ul class="isel-item"
+                        data-prototype="
+                            {% filter escape %}
+                            {{ include('CPASimUSanteItemSelectorBundle:Form:prototype.html.twig', { 'form': form.items.vars.prototype }) }}
+                            {% endfilter %}">
+
+                        {% for item in form.items %}
+                            {{ form_row(item) }}
+                        {% endfor %}
+                    </ul>
+                #}
+
+                <ul class="isel-item" data-prototype="{{ _self.isel_prototype(form.items.vars.prototype)|e }}">
+                    {% for item in form.items %}
+                        {{ _self.isel_prototype(item) }}
+                    {% endfor %}
+                </ul>
+
+<!--
         <a href="#" class="btn btn-info form-collection-add">Add</a>
         <button class="btn btn-default" type="button" data-toggle="tooltip" title="Cliquez pour ajouter">
             <span class="fa fa-plus"></span>Ajouter un item
         </button>
+-->
     </div>
 
     <div class="panel-footer">
         <button type="button" class="btn btn-default" >{{ 'cancel'|trans({}, 'platform') }}</button>
         <button type="submit" class="btn btn-primary">{{ 'save'|trans({}, 'platform') }}</button>
+
+        {% if form.items.count > 0 %}
+            <button class="btn btn-default show-exercices" type="button" data-toggle="tooltip" title="Voir les Exercices">
+                <span class="fa fa-eye"></span> Répondre aux questions
+            </button>
+        {% endif %}
+    </div>
     </div>
     </form>
 
 <!-- Display Exercices -->
-
+<div id="dfasm" style="display: none;">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Exercice 1</h3>
+        </div>
+        <div class="panel-body" id="text_content">
+            <iframe class="activity-iframe" ></iframe>
+        </div>
+    </div>
+</div>
     {# {% for resource in _resource.getParameters().getSecondaryResources() %}
     <div class="hide" id="resource-{{ resource.getId() }}">
         <iframe class="activity-iframe" src="{{ path('claro_resource_open', { 'resourceType': resource.getResourceType().getName(), 'node': resource.getId() }) }}"></iframe>
@@ -50,11 +94,55 @@
 
 {% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        li.isel-item *{
+            display:inline-block;
+        }
+    </style>
+<!--    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/cpasimusanteitemselector/css/itemselector.css') }}"> -->
+{% endblock %}
+
 {% block javascripts %}
     {# Claroline JS #}
     {{ parent() }}
     <script type="text/javascript">
+        var $collectionHolder;
+
+        var $addItemLink = $('<a href="#" class="add_item_link btn btn-info"><span class="fa fa-plus"></span> Ajouter un item</a>');
+        var $newLink = $('<li></li>').append($addItemLink);
+
         $(document).ready(function() {
+
+            var $collectionHolder = $('ul.isel-item');
+console.log("out");console.log($collectionHolder);
+            // add a delete link to all of the existing Item form li elements
+            $collectionHolder.find('table tr').each(function() {
+console.log("this");console.log(this);
+                addItemFormDeleteLink($(this));
+            });
+
+            // add the "add an item" anchor and li to the tags ul
+            $collectionHolder.append($newLink);
+
+            // count the current form inputs we have (e.g. 2), use that as the new
+            // index when inserting a new item (e.g. 2)
+            $collectionHolder.data('index', $collectionHolder.find(':input').length);
+
+            $addItemLink.on('click', function(e) {
+                // prevent the link from creating a "#" on the URL
+                e.preventDefault();
+
+                // add a new item form (see code block below)
+                addItemForm($collectionHolder, $newLink);
+            });
+
+            $('.show-exercices').on('click', function(){
+                $('#dfasm').toggle();
+console.log("show it");
+            });
+
 /*
             var manager = window.Claroline.ResourceManager;
 
@@ -115,5 +203,53 @@
             }
 */
         });
+
+        function addItemForm($collectionHolder, $newLink) {
+            // Get the data-prototype explained earlier
+            var prototype = $collectionHolder.data('prototype');
+
+            // get the new index
+            var index = $collectionHolder.data('index');
+
+            // Replace '$$name$$' in the prototype's HTML to
+            // instead be a number based on how many items we have
+            var newForm = prototype.replace(/__name__/g, index);
+
+            // increase the index with one for the next item
+            $collectionHolder.data('index', index + 1);
+
+            // Display the form in the page in an li, before the "Add an Item" link li
+            var $newFormLi = $('<li></li>').append(newForm);
+
+            // also add a remove button, just for this example
+            //$newFormLi.append('<a href="#" class="remove-item btn btn-danger">x</a>');
+
+            $newLink.before($newFormLi);
+
+            // add a delete link to the new form
+            addItemFormDeleteLink($newFormLi);
+
+            // handle the removal, just for this example
+            $('.remove-item').click(function(e) {
+                e.preventDefault();
+
+                $(this).parent().remove();
+
+                return false;
+            });
+        }
+
+        function addItemFormDeleteLink($itemFormLi) {
+            var $removeFormA = $('<td><a href="#" class="remove-item btn btn-danger"><span class="fa fa-trash"></span></a></td>');
+            $($itemFormLi).find("tr").append($removeFormA);
+
+            $($removeFormA).find("a").on('click', function(e) {
+                // prevent the link from creating a "#" on the URL
+                e.preventDefault();
+
+                // remove the li for the tag form
+                $itemFormLi.remove();
+            });
+        }
     </script>
 {% endblock %}

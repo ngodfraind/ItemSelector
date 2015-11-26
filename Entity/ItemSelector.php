@@ -52,7 +52,6 @@ class ItemSelector extends AbstractResource
         $this->items = new ArrayCollection();
     }
 
-
     /**
      * Add item
      *
@@ -62,9 +61,13 @@ class ItemSelector extends AbstractResource
      */
     public function addItem(\CPASimUSante\ItemSelectorBundle\Entity\Item $item)
     {
-        $this->items[] = $item;
-
+ /*       $this->items[] = $item;
+        //$item->setItemselector($this);
         return $this;
+*/
+        $item->setItemselector($this);
+
+        $this->items->add($item);
     }
 
     /**

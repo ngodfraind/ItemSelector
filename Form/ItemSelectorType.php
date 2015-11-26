@@ -33,12 +33,34 @@ class ItemSelectorType extends AbstractType
                     'attr' => array(
                         'data-is-picker-multi-select-allowed'   => 0,
                         'data-is-directory-selection-allowed'   => 0,
-                        'data-type-wite-list'                  => 'icap_wiki',
+                        'data-type-wite-list'                   => 'icap_wiki',
                         /*'data-restrict-for-owner'               => 0,*/
                     ),
                     'label' => 'resource_to_open'
                 )
-            );
+            )
+           /* ->add(
+                'items', 'entity', array(
+                    'multiple'  => false,
+                    'class' => 'CPASimUSanteItemSelectorBundle:Item',
+                    //'options' => array('data_class' => 'UJM\ExoBundle\Entity\Exercise'),
+                    //'prototype'     => true,
+                    //'allow_add'     => true,
+                    //'allow_delete'  => true
+                )
+            )
+            */
+
+            ->add(
+                'items', 'collection', array(
+                    'type'          => new ItemType(),
+                    'by_reference'  => false,
+                    'prototype'     => true,
+                    'allow_add'     => true,
+                    'allow_delete'  => true
+                )
+            )
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver)

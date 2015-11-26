@@ -1,6 +1,6 @@
 <?php
 
-namespace CPASimUSante\ItemSelectorBundle\Entity;
+namespace CPASimUSante\ItemSelectorBundle\Repository;
 
 /**
  * ItemRepository

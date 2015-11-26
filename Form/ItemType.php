@@ -2,6 +2,7 @@
 
 namespace CPASimUSante\ItemSelectorBundle\Form;
 
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -15,15 +16,26 @@ class ItemType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+
             ->add(
-                'itemcode', 'collection', array(
-                    'type' => new ItemType,
-                    'prototype' => true,
-                    'allow_add' => true,
-                    'allow_delete' => true
+                'itemcode', 'entity', array(
+                    'label'         => 'Code',
+                    'class'         => 'UJMExoBundle:Exercise',
+                    'property'      =>'title',
+                    'query_builder' => function(EntityRepository $er) {
+                        return $er->createQueryBuilder('e')
+                            ->orderBy('e.title', 'ASC');
+                    }
                 )
             );
-        ;
+        /*
+
+            ->add(
+                'itemcode', 'text', array(
+                    'label' => 'Code'
+                )
+            );
+*/
     }
     
     /**

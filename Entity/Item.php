@@ -27,7 +27,7 @@ class Item
      *
      * @ORM\Column(name="itemcode", type="string", length=255)
      */
-    private $itemcode;
+    protected $itemcode;
 
 
     /**
