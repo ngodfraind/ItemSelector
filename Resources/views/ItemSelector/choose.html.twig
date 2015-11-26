@@ -20,6 +20,14 @@
 </table>
 {% endmacro %}
 
+
+{#
+TODO :
+- use entities instead of input text (id=> name)
+- use filtered entities : Exercices with name like 'ecn-*'
+- make it save the entity id
+- display iframe of exercices
+#}
 {% block section_content %}
     <form action="{{ path('cpasimusante_choose_item', {'id': _resource.id}) }}" method="post" {{ form_enctype(form) }}>
 
@@ -33,9 +41,13 @@
 
         <label class="control-label col-md-4">A quels items DFASM correspond-il ?</label>
         {#
+//Customize prototype & template
         http://stackoverflow.com/questions/7555702/how-to-customize-the-data-prototype-attribute-in-symfony-2-forms
         http://toni.uebernickel.info/2012/03/15/an-example-of-symfony2-collectiontype-form-field-prototype.html
 
+//customize request
+//http://www.developpez.net/forums/d1264028/php/bibliotheques-frameworks/symfony/symfony2/form-realiser-simple-formulaire-entity-field-type/
+//http://stackoverflow.com/questions/8456298/custom-query-in-entity-field-type
                     <ul class="isel-item"
                         data-prototype="
                             {% filter escape %}
@@ -71,6 +83,7 @@
                 <span class="fa fa-eye"></span> Répondre aux questions
             </button>
         {% endif %}
+
     </div>
     </div>
     </form>
@@ -82,7 +95,7 @@
             <h3 class="panel-title">Exercice 1</h3>
         </div>
         <div class="panel-body" id="text_content">
-            <iframe class="activity-iframe" ></iframe>
+            <iframe class="activity-iframe" src="{{ path('claro_resource_open', { 'resourceType': 'ujm_exercise', 'node': 52 }) }}"></iframe>
         </div>
     </div>
 </div>
@@ -99,6 +112,10 @@
     <style>
         li.isel-item *{
             display:inline-block;
+        }
+        iframe {
+            display: block;                 /* iframes are inline by default */
+            height: 100vh !important;        /* Viewport-relative units */
         }
     </style>
 <!--    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/cpasimusanteitemselector/css/itemselector.css') }}"> -->
@@ -136,6 +153,11 @@ console.log("this");console.log(this);
 
                 // add a new item form (see code block below)
                 addItemForm($collectionHolder, $newLink);
+            });
+
+
+            $(".activity-iframe").load(function() {
+                $(this).height( $(this).contents().find("html").height() );
             });
 
             $('.show-exercices').on('click', function(){
