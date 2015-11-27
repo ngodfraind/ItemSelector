@@ -29,7 +29,6 @@ class CPASimUSanteItemSelectorExtension extends Extension
         $loader->load('listeners.yml');
         $loader->load('controllers.yml');
         $loader->load('forms.yml');
-        $loader->load('managers.yml');
 
         return $this;
     }
