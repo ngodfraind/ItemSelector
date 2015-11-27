@@ -33,6 +33,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 class ItemSelectorController extends Controller
 {
     /**
+     * Show main page
+     *
      * @EXT\Route("/choose/{id}", name="cpasimusante_choose_item", requirements={"id" = "\d+"}, options={"expose"=true})
      * @EXT\ParamConverter("itemselector", class="CPASimUSanteItemSelectorBundle:ItemSelector", options={"id" = "id"})
      * @EXT\Template("CPASimUSanteItemSelectorBundle:ItemSelector:choose.html.twig")
@@ -41,13 +43,6 @@ class ItemSelectorController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-/*        $item1 = new Item();
-        $item1->setItemcode('xxx');
-        $itemSelector->addItem($item1);
-        $item2 = new Item();
-        $item2->setItemcode('yyy');
-        $itemSelector->addItem($item2);
-*/
         $originalItems = new ArrayCollection();
 
         // Create an ArrayCollection of the current Item objects in the database

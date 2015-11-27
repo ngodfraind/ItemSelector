@@ -24,7 +24,6 @@
 {#
 TODO :
 - use entities instead of input text (id=> name)
-- use filtered entities : Exercices with name like 'ecn-*'
 - make it save the entity id
 - display iframe of exercices
 #}
@@ -37,7 +36,7 @@ TODO :
     </div>
     <div class="panel-body" id="text_content">
 
-        {{ form_row(form.title) }}
+        {{ form_row(form.resource) }}
 
         <label class="control-label col-md-4">A quels items DFASM correspond-il ?</label>
         {#
@@ -95,11 +94,18 @@ TODO :
             <h3 class="panel-title">Exercice 1</h3>
         </div>
         <div class="panel-body" id="text_content">
-            <iframe class="activity-iframe" src="{{ path('claro_resource_open', { 'resourceType': 'ujm_exercise', 'node': 52 }) }}"></iframe>
+            <div class="fullframe" style="position: relative">
+                <iframe class="activity-iframe" src="{{ path('claro_resource_open', { 'resourceType': 'ujm_exercise', 'node': 52 }) }}"></iframe>
+                <div class="popout" style="position: absolute; top: 20px; right: 20px; padding: 3px; border: 1px solid rgb(170, 170, 170); display: block; background-color: rgb(255, 255, 255);"><a>Full page</a></div>
+                <div class="popin" style="position: fixed; top: 35px; right: 35px; padding: 3px; border: 1px solid rgb(170, 170, 170); z-index: 10001; display: none; background-color: rgb(255, 255, 255);"><a>Close</a></div>
+            </div>
         </div>
     </div>
 </div>
-    {# {% for resource in _resource.getParameters().getSecondaryResources() %}
+    {#
+    //http://stackoverflow.com/questions/3982422/full-screen-iframe
+
+    {% for resource in _resource.getParameters().getSecondaryResources() %}
     <div class="hide" id="resource-{{ resource.getId() }}">
         <iframe class="activity-iframe" src="{{ path('claro_resource_open', { 'resourceType': resource.getResourceType().getName(), 'node': resource.getId() }) }}"></iframe>
     </div>
@@ -131,6 +137,19 @@ TODO :
         var $newLink = $('<li></li>').append($addItemLink);
 
         $(document).ready(function() {
+
+            //iframe fullpage
+            $(".popout").on('click', function(){
+                $(".fullframe").css({"position":"fixed","top":0,"left":0,"width":"100%","height":"100%","background-color":"#FFFFFF","z-index":1e4})
+                $(this).hide();
+                $(".popin").show();
+            });
+            $(".popin").on('click', function(){
+                $(".fullframe").css({"position":"relative"})
+                $(this).hide();
+                $(".popout").show();
+            });
+
 
             var $collectionHolder = $('ul.isel-item');
 console.log("out");console.log($collectionHolder);

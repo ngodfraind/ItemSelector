@@ -2,6 +2,7 @@
 
 namespace CPASimUSante\ItemSelectorBundle\Listener;
 
+use Claroline\CoreBundle\Event\PluginOptionsEvent;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Claroline\CoreBundle\Event\CopyResourceEvent;
 use Claroline\CoreBundle\Event\CreateFormResourceEvent;
@@ -17,13 +18,19 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ItemSelectorListener extends ContainerAware
 {
+    /**
+     * Show modal at resource creation
+     *
+     * @param CreateFormResourceEvent $event
+     */
     public function onCreateForm(CreateFormResourceEvent $event)
     {
-        // Create form
+        // Create form (only the title here)
         $form = $this->container->get('form.factory')
-            ->create(new ItemSelectorType(), new ItemSelector());
+            ->create(new ItemSelectorType(), new ItemSelector(), array('inside'=>false));
 
-        $content = $this->container->get('templating')
+        $content = $this->container
+            ->get('templating')
             ->render(
                 'ClarolineCoreBundle:Resource:createForm.html.twig',
                 array(
@@ -35,11 +42,18 @@ class ItemSelectorListener extends ContainerAware
         $event->setResponseContent($content);
         $event->stopPropagation();
     }
-
+    /**
+     * when resource creation modal form is sent
+     *
+     * @param CreateFormResourceEvent $event
+     */
     public function onCreate(CreateResourceEvent $event)
     {
         $request = $this->container->get('request');
-        $form = $this->container->get('form.factory')->create(new ItemSelectorType(), new ItemSelector());
+        $form = $this->container
+            ->get('form.factory')
+            ->create(new ItemSelectorType(), new ItemSelector(), array('inside'=>false));
+
         $form->handleRequest($request);
 
         if ($form->isValid()) {
@@ -53,13 +67,15 @@ class ItemSelectorListener extends ContainerAware
             return;
         }
 
-        $content = $this->container->get('templating')->render(
-            'ClarolineCoreBundle:Resource:createForm.html.twig',
-            array(
-                'form' => $form->createView(),
-                'resourceType' => 'cpasimusante_itemselector'
-            )
-        );
+        $content = $this->container
+            ->get('templating')
+            ->render(
+                'ClarolineCoreBundle:Resource:createForm.html.twig',
+                array(
+                    'form' => $form->createView(),
+                    'resourceType' => 'cpasimusante_itemselector'
+                )
+            );
         $event->setErrorFormContent($content);
         $event->stopPropagation();
     }
@@ -88,21 +104,6 @@ class ItemSelectorListener extends ContainerAware
             );
         $event->setResponse(new RedirectResponse($route));
         $event->stopPropagation();
-
-/*
-        $form = $this->container->get('form.factory')
-            ->create(new ItemSelectorType(), new ItemSelector());
-        $content = $this->container->get('templating')->render(
-            'CPASimUSanteItemSelectorBundle:ItemSelector:index.html.twig',
-            array(
-                '_resource' => $event->getResource(),
-                'form'   => $form->createView(),
-            )
-        );
-        $response = new Response($content);
-        $event->setResponse($response);
-        $event->stopPropagation();
-*/
     }
 
     /**
@@ -115,7 +116,8 @@ class ItemSelectorListener extends ContainerAware
             ->get("cpasimusante_itemselector.plugin.manager.config");
         $form = $pluginManager->getPluginconfigForm();
 */
-        $content = $this->templating
+        $content = $this->container
+            ->get('templating')
             ->render(
                 'CPASimUSanteItemSelectorBundle::config.html.twig',
                 array(
