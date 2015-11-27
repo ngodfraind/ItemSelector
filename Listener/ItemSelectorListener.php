@@ -111,10 +111,10 @@ class ItemSelectorListener extends ContainerAware
     public function onPluginConfigure(PluginOptionsEvent $event)
     {
         //retrieve the plugin manager with its Service name
-        $pluginManager = $this->container
+/*        $pluginManager = $this->container
             ->get("cpasimusante_itemselector.plugin.manager.config");
         $form = $pluginManager->getPluginconfigForm();
-
+*/
         $content = $this->templating
             ->render(
                 'CPASimUSanteItemSelectorBundle::config.html.twig',
