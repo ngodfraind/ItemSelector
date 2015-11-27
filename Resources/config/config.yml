@@ -1,5 +1,5 @@
 plugin:
-    has_options: false
+    has_options: true
     icon: res_simu_si.png
     resources:
         -
