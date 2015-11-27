@@ -1,4 +1,0 @@
-services:
-# ItemSelector config
-   cpasimusante_itemselector.plugin.manager.config:
-       class: %cpasimusante_itemselector.manager.class%
