@@ -7,6 +7,3 @@ parameters:
 
     # Listeners
     cpasimusante_itemselector.listener.itemselector.class: CPASimUSante\ItemSelectorBundle\Listener\ItemSelectorListener
-
-    # Managers
-    cpasimusante_itemselector.manager.config.class: CPASimUSante\ItemSelectorBundle\Manager\ItemSelectorConfigManager
