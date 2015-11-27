@@ -43,9 +43,8 @@ class ItemSelectorController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $originalItems = new ArrayCollection();
-
         // Create an ArrayCollection of the current Item objects in the database
+        $originalItems = new ArrayCollection();
         foreach ($itemSelector->getItems() as $item) {
             $originalItems->add($item);
         }
@@ -57,22 +56,21 @@ class ItemSelectorController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
+
             // remove the relationship between the item and the ItemSelector
             foreach ($originalItems as $item) {
+
                 if (false === $itemSelector->getItems()->contains($item)) {
-                    // remove the Task from the Tag
-                    //$item->getTasks()->removeElement($itemSelector);
 
-                    // if it was a many-to-one relationship, remove the relationship like this
+                    // in a a many-to-one relationship, remove the relationship
                     $item->setItemSelector(null);
-
-                    $em->persist($item);
-
-                    // if you wanted to delete the Item entirely, you can also do that
-                    // $em->remove($tag);
+/*
+                    //$em->persist($item);
+*/
+                    // to delete the Item entirely, you can also do that
+                    $em->remove($item);
                 }
             }
-
             $em->persist($itemSelector);
             $em->flush();
         }
