@@ -9,3 +9,4 @@ services:
             - { name: kernel.event_listener, event: delete_cpasimusante_itemselector,       method: onDelete }
             - { name: kernel.event_listener, event: copy_cpasimusante_itemselector,         method: onCopy }
             - { name: kernel.event_listener, event: open_cpasimusante_itemselector,         method: onOpen }
+            - { name: kernel.event_listener, event: plugin_options_itemselectorbundle,      method: onAdministrate }

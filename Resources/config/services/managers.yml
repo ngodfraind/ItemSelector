@@ -1,1 +1,4 @@
 services:
+    # Administration
+    cpasimusante_itemselector.manager.plugin.itemselector:
+        class:  %cpasimusante_itemselector.manager.plugin.itemselector.class%

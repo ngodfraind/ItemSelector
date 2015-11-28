@@ -106,16 +106,17 @@ class ItemSelectorListener extends ContainerAware
         $event->stopPropagation();
     }
 
+
     /**
      * @param PluginOptionsEvent $event
      */
-    public function onPluginConfigure(PluginOptionsEvent $event)
+    public function onAdministrate(PluginOptionsEvent $event)
     {
         //retrieve the plugin manager with its Service name
-/*        $pluginManager = $this->container
-            ->get("cpasimusante_itemselector.plugin.manager.config");
-        $form = $pluginManager->getPluginconfigForm();
-*/
+        $pluginManager = $this->container
+            ->get("cpasimusante_itemselector.manager.plugin.itemselector");
+   //     $form = $pluginManager->getPluginConfigForm();
+
         $content = $this->container
             ->get('templating')
             ->render(

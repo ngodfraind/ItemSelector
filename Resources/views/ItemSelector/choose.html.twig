@@ -11,23 +11,23 @@
 {% block title %}{{ _resource.getResourceNode().getName() | striptags | raw }}{% endblock %}
 
 {% macro isel_prototype(form) %}
-<table class="table">
-    <tr>
-        <td class="isel_label">{{ form_label(form.itemcode) }}</td>
-        <td class="isel_widget">{{ form_widget(form.itemcode) }}</td>
-        <td class="isel_error">{{ form_errors(form.itemcode) }}</td>
-    </tr>
-</table>
+    <table class="table">
+        <tr>
+            <td class="isel_label">{{ form_label(form.itemcode) }}</td>
+            <td class="isel_widget">{{ form_widget(form.itemcode) }}</td>
+            <td class="isel_error">{{ form_errors(form.itemcode) }}</td>
+        </tr>
+    </table>
 {% endmacro %}
 
 {% macro tabs(inc) %}
-    <li><a href="#" data-id="{{ inc }}">Exercice {{ inc }}</a></li>
+    <li><a href="#" data-id="{{ inc }}" class="dfasmtab">Exercice {{ inc }}</a></li>
 {% endmacro %}
 
 {% macro tabcontent(inc, datacode) %}
-<div class="panel-body dfasmcontent" id="text_content-{{ inc }}">
-    <iframe class="activity-iframe" src="{{ path('claro_resource_open', { 'resourceType': 'ujm_exercise', 'node': datacode }) }}"></iframe>
-</div>
+    <div class="panel-body dfasmcontent" id="text_content-{{ inc }}">
+        <iframe class="activity-iframe" src="{{ path('claro_resource_open', { 'resourceType': 'ujm_exercise', 'node': datacode }) }}"></iframe>
+    </div>
 {% endmacro %}
 
 {#
@@ -37,62 +37,61 @@ TODO :
 - display iframe of exercices
 #}
 {% block section_content %}
-    <form action="{{ path('cpasimusante_choose_item', {'id': _resource.id}) }}" method="post" {{ form_enctype(form) }}>
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">{{ _resource.getResourceNode().getName() }}</h3>
-            </div>
-
-            <div class="panel-body" id="text_content">
-                {{ form_row(form.resource) }}
-                <label class="control-label col-md-4">A quels items DFASM correspond-il ?</label>
-        {#
-//Customize prototype & template
-        http://stackoverflow.com/questions/7555702/how-to-customize-the-data-prototype-attribute-in-symfony-2-forms
-        http://toni.uebernickel.info/2012/03/15/an-example-of-symfony2-collectiontype-form-field-prototype.html
-
-//customize request
-//http://www.developpez.net/forums/d1264028/php/bibliotheques-frameworks/symfony/symfony2/form-realiser-simple-formulaire-entity-field-type/
-//http://stackoverflow.com/questions/8456298/custom-query-in-entity-field-type
-                    <ul class="isel-item"
-                        data-prototype="
-                            {% filter escape %}
-                            {{ include('CPASimUSanteItemSelectorBundle:Form:prototype.html.twig', { 'form': form.items.vars.prototype }) }}
-                            {% endfilter %}">
-
-                        {% for item in form.items %}
-                            {{ form_row(item) }}
-                        {% endfor %}
-                    </ul>
-                #}
-
-                <ul class="isel-item" data-prototype="{{ _self.isel_prototype(form.items.vars.prototype)|e }}">
-                    {% for item in form.items %}
-                        <li>{{ _self.isel_prototype(item) }}</li>
-                    {% endfor %}
-                </ul>
-
-            </div>
-
-            <div class="panel-footer">
-                <button type="button" class="btn btn-default" >{{ 'cancel'|trans({}, 'platform') }}</button>
-                <button type="submit" class="btn btn-primary">{{ 'save'|trans({}, 'platform') }}</button>
-
-                {% if form.items.count > 0 %}
-                    <button class="btn btn-default show-exercices" type="button" data-toggle="tooltip" title="Voir les Exercices">
-                        <span class="fa fa-eye"></span> Répondre aux questions
-                    </button>
-                {% endif %}
-            </div>
+<form action="{{ path('cpasimusante_choose_item', {'id': _resource.id}) }}" method="post" {{ form_enctype(form) }}>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">{{ _resource.getResourceNode().getName() }}</h3>
         </div>
-    </form>
+
+        <div class="panel-body" id="text_content">
+            {{ form_row(form.resource) }}
+            <label class="control-label col-md-4">A quels items DFASM correspond-il ?</label>
+            {#
+    //Customize prototype & template
+            http://stackoverflow.com/questions/7555702/how-to-customize-the-data-prototype-attribute-in-symfony-2-forms
+            http://toni.uebernickel.info/2012/03/15/an-example-of-symfony2-collectiontype-form-field-prototype.html
+
+    //customize request
+    //http://www.developpez.net/forums/d1264028/php/bibliotheques-frameworks/symfony/symfony2/form-realiser-simple-formulaire-entity-field-type/
+    //http://stackoverflow.com/questions/8456298/custom-query-in-entity-field-type
+                        <ul class="isel-item"
+                            data-prototype="
+                                {% filter escape %}
+                                {{ include('CPASimUSanteItemSelectorBundle:Form:prototype.html.twig', { 'form': form.items.vars.prototype }) }}
+                                {% endfilter %}">
+
+                            {% for item in form.items %}
+                                {{ form_row(item) }}
+                            {% endfor %}
+                        </ul>
+                    #}
+
+            <ul class="isel-item" data-prototype="{{ _self.isel_prototype(form.items.vars.prototype)|e }}">
+                {% for item in form.items %}
+                    <li>{{ _self.isel_prototype(item) }}</li>
+                {% endfor %}
+            </ul>
+
+        </div>
+
+        <div class="panel-footer">
+            <button type="button" class="btn btn-default" >{{ 'cancel'|trans({}, 'platform') }}</button>
+            <button type="submit" class="btn btn-primary">{{ 'save'|trans({}, 'platform') }}</button>
+
+            {% if form.items.count > 0 %}
+                <button class="btn btn-default show-exercices" type="button" data-toggle="tooltip" title="Voir les Exercices">
+                    <span class="fa fa-eye"></span> Répondre aux questions
+                </button>
+            {% endif %}
+        </div>
+    </div>
+</form>
 
 
 
 <div id="activities-evaluations">
 
-
-<!-- Display Exercices -->
+    <!-- Display Exercices -->
     <div id="dfasm" style="display: none;">
         <div class="panel panel-default">
             <div class="fullframe" style="position: relative">
@@ -101,9 +100,9 @@ TODO :
 
                 {% set tabs = "" %}
                 {% set tabcontent = "" %}
-                    {% for item in form.items %}
-                        {% set tabs = tabs ~ _self.tabs(loop.index) %}
-                        {% set tabcontent = tabcontent ~ _self.tabcontent(loop.index, item.itemcode.vars.data) %}
+                {% for item in form.items %}
+                    {% set tabs = tabs ~ _self.tabs(loop.index) %}
+                    {% set tabcontent = tabcontent ~ _self.tabcontent(loop.index, item.itemcode.vars.data) %}
                 {% endfor %}
                 <ul class="nav nav-tabs">{{ tabs | raw  }}</ul>
                 {{ tabcontent | raw  }}
@@ -111,32 +110,29 @@ TODO :
         </div>
     </div>
     {#
-    //http://stackoverflow.com/questions/3982422/full-screen-iframe
-
-    {% for resource in _resource.getParameters().getSecondaryResources() %}
-    <div class="hide" id="resource-{{ resource.getId() }}">
-        <iframe class="activity-iframe" src="{{ path('claro_resource_open', { 'resourceType': resource.getResourceType().getName(), 'node': resource.getId() }) }}"></iframe>
-    </div>
-     {% endfor %}    #}
+    //http://stackoverflow.com/questions/3982422/full-screen-iframe #}
+</div>
 {% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
-    <style>
-        .isel-item { list-style-type:none}
+        <style>
+            .isel-item { list-style-type:none}
 
-        iframe {
-            display: block;                 /* iframes are inline by default */
-            height: 100vh !important;        /* Viewport-relative units */
-        }
-        .popout{
-            display: block; position: absolute; top: 20px; right: 20px; padding: 3px; background-color: #ffdb27;
-        }
-        .popin{
-            position: fixed; top: 35px; right: 35px; padding: 3px; z-index: 10001; display: none;  background-color: #ffdb27;
-        }
-    </style>
-<!--    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/cpasimusanteitemselector/css/itemselector.css') }}"> -->
+            iframe {
+                display: block;                 /* iframes are inline by default */
+                height: 100vh !important;        /* Viewport-relative units */
+            }
+            .popout{
+                display: block; position: absolute; top: 20px; right: 20px; padding: 3px; background-color: #ffdb27;
+            }
+            .popin{
+                position: fixed; top: 35px; right: 35px; padding: 3px; z-index: 10001; display: none;  background-color: #ffdb27;
+            }
+            .fullframe{position: relative}
+            .showfull {position: fixed;top: 0;left: 0;width:100%;height: 100vh;z-index: 10000}
+        </style>
+        <!--    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/cpasimusanteitemselector/css/itemselector.css') }}"> -->
 {% endblock %}
 
 {% block javascripts %}
@@ -145,7 +141,7 @@ TODO :
     <script type="text/javascript">
         $(document).ready(function() {
 
-            //iframe fullpage
+         //iframe fullpage
             $(".popout").on('click', function(){
                 $(".fullframe").css({"position":"fixed","top":0,"left":0,"width":"100%","height":"100%","background-color":"#FFFFFF","z-index":1e4})
                 $(this).hide();
@@ -162,6 +158,8 @@ TODO :
                 $(".dfasmcontent").hide();
                 if ($("#text_content-"+i)) {
                     $("#text_content-"+i).show();
+                    $(".dfasmtab").parent().removeClass("active");
+                    $("a[data-id="+i+"]").parent().addClass("active");
                 }
             }
             selecttab(1);
@@ -174,10 +172,9 @@ TODO :
             var $addItemLink = $('<a href="#" class="add_item_link btn btn-info"><span class="fa fa-plus"></span> Ajouter un item</a>');
             var $newLink = $('<li></li>').append($addItemLink);
 
-//console.log("out");console.log($collectionHolder);
             // add a delete link to all of the existing Item form li elements
             $collectionHolder.find('table tr').each(function() {
-console.log("this");console.log(this);
+                console.log("this");console.log(this);
                 addItemFormDeleteLink($(this));
             });
 
@@ -196,39 +193,37 @@ console.log("this");console.log(this);
                 addItemForm($collectionHolder, $newLink);
             });
 
-
             $(".activity-iframe").load(function() {
                 $(this).height( $(this).contents().find("html").height() );
             });
 
             $('.show-exercices').on('click', function(){
                 $('#dfasm').toggle();
-console.log("show it");
             });
 
-/*
-            var manager = window.Claroline.ResourceManager;
+                /*
+                 var manager = window.Claroline.ResourceManager;
 
-            //Add a ressource Picker event for the Clinical case (wiki)
-            $('body').on('click', '.add-resource', function () {
-                var resource = $(this).data('id');
+                 //Add a ressource Picker event for the Clinical case (wiki)
+                 $('body').on('click', '.add-resource', function () {
+                 var resource = $(this).data('id');
 
-                if (!manager.hasPicker('itemselectorResourcePicker')) {
-                    manager.createPicker('itemselectorResourcePicker', {
-                        callback: function (nodes) {
-                            var nodeId = _.keys(nodes)[0];
-                            addResource(resource, nodeId);
-                        },
-                        typeWhiteList: ['wiki'],
-                        restrictForOwner: true,
-                        isPickerMultiSelectAllowed: false,
-                        isDirectorySelectionAllowed: false
-                    }, true);
-                } else {
-                    manager.picker('itemselectorResourcePicker', 'open');
-                }
-            });
-*/
+                 if (!manager.hasPicker('itemselectorResourcePicker')) {
+                 manager.createPicker('itemselectorResourcePicker', {
+                 callback: function (nodes) {
+                 var nodeId = _.keys(nodes)[0];
+                 addResource(resource, nodeId);
+                 },
+                 typeWhiteList: ['wiki'],
+                 restrictForOwner: true,
+                 isPickerMultiSelectAllowed: false,
+                 isDirectorySelectionAllowed: false
+                 }, true);
+                 } else {
+                 manager.picker('itemselectorResourcePicker', 'open');
+                 }
+                 });
+                 */
         });
 
         function addItemForm($collectionHolder, $newLink) {
