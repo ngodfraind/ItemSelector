@@ -37,7 +37,7 @@ TODO :
 - display iframe of exercices
 #}
 {% block section_content %}
-<form action="{{ path('cpasimusante_choose_item', {'id': _resource.id}) }}" method="post" {{ form_enctype(form) }}>
+<form action="{{ path('cpasimusante_choose_item', {'id': _resource.id}) }}" method="post" {{ form_enctype(form) }} id="form">
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">{{ _resource.getResourceNode().getName() }}</h3>

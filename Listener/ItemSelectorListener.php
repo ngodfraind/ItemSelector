@@ -14,6 +14,7 @@ use CPASimUSante\ItemSelectorBundle\Form\ItemSelectorType;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 
 class ItemSelectorListener extends ContainerAware
@@ -112,6 +113,7 @@ class ItemSelectorListener extends ContainerAware
      */
     public function onAdministrate(PluginOptionsEvent $event)
     {
+        /*
         //retrieve the plugin manager with its Service name
         $pluginManager = $this->container
             ->get("cpasimusante_itemselector.manager.plugin.itemselector");
@@ -127,6 +129,28 @@ class ItemSelectorListener extends ContainerAware
             );
         //PluginOptionsEvent require a setResponse()
         $event->setResponse(new Response($content));
+        $event->stopPropagation();
+        */
+
+        /*
+        $route = $this->container
+            ->get('router')
+            ->generate(
+                'cpasimusante_mainconfig',
+                array(
+                )
+            );
+        $event->setResponse(new RedirectResponse($route));
+        $event->stopPropagation();
+        */
+
+        $requestStack = $this->container->get('request_stack');
+        $httpKernel = $this->container->get('http_kernel');
+        $request = $requestStack->getCurrentRequest();
+        $params = array('_controller' => 'CPASimUSanteItemSelectorBundle:MainConfig:AdminOpen');
+        $subRequest = $request->duplicate(array(), null, $params);
+        $response = $httpKernel->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
+        $event->setResponse($response);
         $event->stopPropagation();
     }
 }

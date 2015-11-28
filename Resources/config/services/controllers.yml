@@ -9,3 +9,9 @@ services:
 #            pathManager:       @cpasimusante_itemselector.manager.path
 #            publishingManager: @cpasimusante_itemselector.manager.publishing
 #        scope: request
+
+    # ItemSelector controller
+    cpasimusante_itemselector.controller.mainconfig:
+        class: %cpasimusante_itemselector.controller.mainconfig.class%
+        calls:
+            - [ setContainer, [ @service_container ]]
