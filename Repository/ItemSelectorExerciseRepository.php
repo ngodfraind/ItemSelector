@@ -19,8 +19,8 @@ class ItemSelectorExerciseRepository extends ExerciseRepository
             ->select('e')
             ->from('UJM\ExoBundle\Entity\Exercise', 'e')
             ->where('e.title LIKE :item')
-            ->orderBy('e.'.$orderedBy, 'ASC')
-            ->setParameter('item', 'ecn-%');
+            ->setParameter('item', 'ecn-%')
+            ->orderBy('e.'.$orderedBy, 'ASC');
         return $qb;
     }
 

@@ -25,10 +25,9 @@ class Item
     /**
      * @var string
      *
-     * @ORM\Column(name="itemcode", type="string", length=255)
+     * @ORM\Column(name="itemcode", type="integer")
      */
     protected $itemcode;
-
 
     /**
      * @var ItemSelector

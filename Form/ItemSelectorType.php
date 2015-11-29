@@ -25,13 +25,11 @@ class ItemSelectorType extends AbstractType
                     'label' => 'title'
                 )
             );
-        //To avoid displaying them in Resource creation modal
+        //To avoid displaying them in ItemSelector Resource creation modal
         if ($options['inside']) {
             $builder
                 ->add(
-                    'resource',
-                    'resourcePicker',
-                    array(
+                    'resource', 'resourcePicker', array(
                         'required' => true,
                         'attr' => array(
                             'data-is-picker-multi-select-allowed'   => 0,
@@ -42,18 +40,6 @@ class ItemSelectorType extends AbstractType
                         'label' => 'resource_to_open'
                     )
                 )
-                /* ->add(
-                     'items', 'entity', array(
-                         'multiple'  => false,
-                         'class' => 'CPASimUSanteItemSelectorBundle:Item',
-                         //'options' => array('data_class' => 'UJM\ExoBundle\Entity\Exercise'),
-                         //'prototype'     => true,
-                         //'allow_add'     => true,
-                         //'allow_delete'  => true
-                     )
-                 )
-                 */
-
                 ->add(
                     'items', 'collection', array(
                         'type'          => new ItemType(),

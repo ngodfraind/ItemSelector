@@ -2,7 +2,8 @@
 
 namespace CPASimUSante\ItemSelectorBundle\Form;
 
-use Doctrine\ORM\EntityRepository;
+use CPASimUSante\ItemSelectorBundle\Repository\ItemSelectorResourceNodeRepository;
+use CPASimUSante\ItemSelectorBundle\Repository\ItemSelectorExerciseRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -19,28 +20,15 @@ class ItemType extends AbstractType
             ->add(
                 'itemcode', 'entity', array(
                     'label'         => 'Code',
-                    'class'         => 'CPASimUSanteItemSelectorBundle:ItemSelectorExercise',
-                    'choice_label'  =>'title',
-                    'query_builder' => function(EntityRepository $er) {
-                        return $er->getQbFilteredExercise();
+                    'class'         => 'CPASimUSanteItemSelectorBundle:ItemSelectorResourceNode',
+                    'choice_label'  =>'name',
+                    'empty_value' => 'Choisissez un item',
+                    'query_builder' => function(ItemSelectorResourceNodeRepository $er) {
+                        return $er->getQbFilteredBy(18, 'ecn-%');
                     }
                 )
             );
 /*
-            ->add(
-                'itemcode', 'entity', array(
-                    'label'         => 'Code',
-                    'class'         => 'UJMExoBundle:Exercise',
-                    'choice_label'  =>'title',
-                    'query_builder' => function(EntityRepository $er) {
-                        return $er->createQueryBuilder('e')
-                            ->orderBy('e.title', 'ASC');
-                    }
-                )
-            );
-        */
-        /*
-
             ->add(
                 'itemcode', 'text', array(
                     'label' => 'Code'

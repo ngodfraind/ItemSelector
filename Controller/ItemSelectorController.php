@@ -38,6 +38,9 @@ class ItemSelectorController extends Controller
      * @EXT\Route("/choose/{id}", name="cpasimusante_choose_item", requirements={"id" = "\d+"}, options={"expose"=true})
      * @EXT\ParamConverter("itemselector", class="CPASimUSanteItemSelectorBundle:ItemSelector", options={"id" = "id"})
      * @EXT\Template("CPASimUSanteItemSelectorBundle:ItemSelector:choose.html.twig")
+     * @param Request $request
+     * @param ItemSelector $itemSelector
+     * @return array
      */
     public function chooseAction(Request $request, ItemSelector $itemSelector)
     {
@@ -64,9 +67,9 @@ class ItemSelectorController extends Controller
 
                     // in a a many-to-one relationship, remove the relationship
                     $item->setItemSelector(null);
-/*
-                    //$em->persist($item);
-*/
+
+                    $em->persist($item);
+
                     // to delete the Item entirely, you can also do that
                     $em->remove($item);
                 }

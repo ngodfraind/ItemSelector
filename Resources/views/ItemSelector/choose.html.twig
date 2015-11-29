@@ -30,12 +30,6 @@
     </div>
 {% endmacro %}
 
-{#
-TODO :
-- use entities instead of input text (id=> name)
-- make it save the entity id
-- display iframe of exercices
-#}
 {% block section_content %}
 <form action="{{ path('cpasimusante_choose_item', {'id': _resource.id}) }}" method="post" {{ form_enctype(form) }} id="form">
     <div class="panel panel-default">
@@ -66,11 +60,24 @@ TODO :
                         </ul>
                     #}
 
-            <ul class="isel-item" data-prototype="{{ _self.isel_prototype(form.items.vars.prototype)|e }}">
-                {% for item in form.items %}
-                    <li>{{ _self.isel_prototype(item) }}</li>
-                {% endfor %}
-            </ul>
+                        <ul class="isel-item" data-prototype="{{ _self.isel_prototype(form.items.vars.prototype)|e }}">
+                            {% for item in form.items %}
+                               <li class="item">{{ _self.isel_prototype(item) }}</li>
+                            {% endfor %}
+                        </ul>
+
+            {#                     <ul class="isel-item">
+                                     {% for item in form.items %}
+                                         <li class="item">
+                                             <table class="table">
+                                                 <tr>
+                                                     <td class="isel_label">{{ form_widget(item) }}</td>
+                                                 </tr>
+                                             </table>
+                                         </li>
+                                     {% endfor %}
+                                 </ul>
+           #}
 
         </div>
 
@@ -87,22 +94,20 @@ TODO :
     </div>
 </form>
 
-
-
 <div id="activities-evaluations">
 
     <!-- Display Exercices -->
     <div id="dfasm" style="display: none;">
         <div class="panel panel-default">
             <div class="fullframe" style="position: relative">
-                <div class="popout"><a>Full page</a></div>
-                <div class="popin"><a>Close</a></div>
+                <div class="popout btn btn-warning"><a>Full page</a></div>
+                <div class="popin btn btn-warning"><a>Close</a></div>
 
                 {% set tabs = "" %}
                 {% set tabcontent = "" %}
                 {% for item in form.items %}
                     {% set tabs = tabs ~ _self.tabs(loop.index) %}
-                    {% set tabcontent = tabcontent ~ _self.tabcontent(loop.index, item.itemcode.vars.data) %}
+                    {#  {% set tabcontent = tabcontent ~ _self.tabcontent(loop.index, item.itemcode.vars.data) %} #}
                 {% endfor %}
                 <ul class="nav nav-tabs">{{ tabs | raw  }}</ul>
                 {{ tabcontent | raw  }}
@@ -124,10 +129,10 @@ TODO :
                 height: 100vh !important;        /* Viewport-relative units */
             }
             .popout{
-                display: block; position: absolute; top: 20px; right: 20px; padding: 3px; background-color: #ffdb27;
+                display: block; position: absolute; top: 10px; right: 10px; padding: 3px;
             }
             .popin{
-                position: fixed; top: 35px; right: 35px; padding: 3px; z-index: 10001; display: none;  background-color: #ffdb27;
+                position: fixed; top: 10px; right: 10px; padding: 3px; z-index: 10001; display: none;
             }
             .fullframe{position: relative}
             .showfull {position: fixed;top: 0;left: 0;width:100%;height: 100vh;z-index: 10000}
@@ -168,14 +173,23 @@ TODO :
                 selecttab(id);
             });
 
+            //Show exercises
+            $('.show-exercices').on('click', function(){
+                $('#dfasm').toggle();
+            });
+
+            //maximize frame height
+            $(".activity-iframe").load(function() {
+                $(this).height( $(this).contents().find("html").height() );
+            });
+
             var $collectionHolder = $('ul.isel-item');
             var $addItemLink = $('<a href="#" class="add_item_link btn btn-info"><span class="fa fa-plus"></span> Ajouter un item</a>');
             var $newLink = $('<li></li>').append($addItemLink);
 
             // add a delete link to all of the existing Item form li elements
-            $collectionHolder.find('table tr').each(function() {
-                console.log("this");console.log(this);
-                addItemFormDeleteLink($(this));
+            $collectionHolder.find('li.item').each(function() {
+                addItemFormDeleteLink(this);
             });
 
             // add the "add an item" anchor and li to the tags ul
@@ -191,14 +205,6 @@ TODO :
 
                 // add a new item form (see code block below)
                 addItemForm($collectionHolder, $newLink);
-            });
-
-            $(".activity-iframe").load(function() {
-                $(this).height( $(this).contents().find("html").height() );
-            });
-
-            $('.show-exercices').on('click', function(){
-                $('#dfasm').toggle();
             });
 
                 /*
@@ -241,7 +247,7 @@ TODO :
             $collectionHolder.data('index', index + 1);
 
             // Display the form in the page in an li, before the "Add an Item" link li
-            var $newFormLi = $('<li></li>').append(newForm);
+            var $newFormLi = $('<li class="item"></li>').append(newForm);
 
             // also add a remove button, just for this example
             //$newFormLi.append('<a href="#" class="remove-item btn btn-danger">x</a>');
@@ -251,12 +257,10 @@ TODO :
             // add a delete link to the new form
             addItemFormDeleteLink($newFormLi);
 
-            // handle the removal, just for this example
+            // handle the removal
             $('.remove-item').click(function(e) {
                 e.preventDefault();
-
                 $(this).parent().remove();
-
                 return false;
             });
         }
