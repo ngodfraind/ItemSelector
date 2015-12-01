@@ -13,9 +13,9 @@
 {% macro isel_prototype(form) %}
     <table class="table">
         <tr>
-            <td class="isel_label">{{ form_label(form.itemcode) }}</td>
+            <td class="isel_label">{{ form_label(form) }}</td>
             <td class="isel_widget">{{ form_widget(form.itemcode) }}</td>
-            <td class="isel_error">{{ form_errors(form.itemcode) }}</td>
+            <td class="isel_error">{{ form_errors(form) }}</td>
         </tr>
     </table>
 {% endmacro %}
@@ -24,6 +24,11 @@
     <li><a href="#" data-id="{{ inc }}" class="dfasmtab">Exercice {{ inc }}</a></li>
 {% endmacro %}
 
+{#
+    tabcontent(inc, datacode)
+    - inc : iframe id
+    - datacode : selected exercise
+#}
 {% macro tabcontent(inc, datacode) %}
     <div class="panel-body dfasmcontent" id="text_content-{{ inc }}">
         <iframe class="activity-iframe" src="{{ path('claro_resource_open', { 'resourceType': 'ujm_exercise', 'node': datacode }) }}"></iframe>
@@ -48,6 +53,13 @@
     //customize request
     //http://www.developpez.net/forums/d1264028/php/bibliotheques-frameworks/symfony/symfony2/form-realiser-simple-formulaire-entity-field-type/
     //http://stackoverflow.com/questions/8456298/custom-query-in-entity-field-type
+
+    //http://stackoverflow.com/questions/15199784/symfony2-passing-values-to-collection-form-type
+
+    //http://stackoverflow.com/questions/11999745/how-to-set-up-default-value-in-symfony2-select-box-with-data-from-database/12000289#12000289
+
+
+
                         <ul class="isel-item"
                             data-prototype="
                                 {% filter escape %}
@@ -60,12 +72,18 @@
                         </ul>
                     #}
 
+            <ul class="isel-item" data-prototype="{{ _self.isel_prototype(form.items.vars.prototype)|e }}">
+                {% for item in form.items %}
+                    <li class="item">{{ _self.isel_prototype(item) }}</li>
+                {% endfor %}
+            </ul>
+{#
                         <ul class="isel-item" data-prototype="{{ _self.isel_prototype(form.items.vars.prototype)|e }}">
                             {% for item in form.items %}
                                <li class="item">{{ _self.isel_prototype(item) }}</li>
                             {% endfor %}
                         </ul>
-
+#}
             {#                     <ul class="isel-item">
                                      {% for item in form.items %}
                                          <li class="item">
@@ -107,7 +125,7 @@
                 {% set tabcontent = "" %}
                 {% for item in form.items %}
                     {% set tabs = tabs ~ _self.tabs(loop.index) %}
-                    {#  {% set tabcontent = tabcontent ~ _self.tabcontent(loop.index, item.itemcode.vars.data) %} #}
+                    {#   {% set tabcontent = tabcontent ~ _self.tabcontent(loop.index, item.itemcode.vars.data) %} #}
                 {% endfor %}
                 <ul class="nav nav-tabs">{{ tabs | raw  }}</ul>
                 {{ tabcontent | raw  }}

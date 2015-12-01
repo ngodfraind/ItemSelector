@@ -46,7 +46,7 @@ class ItemSelectorType extends AbstractType
                         'by_reference'  => false,
                         'prototype'     => true,
                         'allow_add'     => true,
-                        'allow_delete'  => true
+                        'allow_delete'  => true,
                     )
                 )
             ;
