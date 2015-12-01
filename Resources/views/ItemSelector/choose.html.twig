@@ -13,9 +13,8 @@
 {% macro isel_prototype(form) %}
     <table class="table">
         <tr>
-            <td class="isel_label">{{ form_label(form) }}</td>
-            <td class="isel_widget">{{ form_widget(form.itemcode) }}</td>
-            <td class="isel_error">{{ form_errors(form) }}</td>
+            <td class="isel_label">{{ form_label(form.itemcode) }}</td>
+            <td class="isel_widget">{{ form_widget(form.itemcode) }}{{ form_errors(form.itemcode) }}</td>
         </tr>
     </table>
 {% endmacro %}
@@ -58,8 +57,6 @@
 
     //http://stackoverflow.com/questions/11999745/how-to-set-up-default-value-in-symfony2-select-box-with-data-from-database/12000289#12000289
 
-
-
                         <ul class="isel-item"
                             data-prototype="
                                 {% filter escape %}
@@ -71,31 +68,27 @@
                             {% endfor %}
                         </ul>
                     #}
-
+{#
             <ul class="isel-item" data-prototype="{{ _self.isel_prototype(form.items.vars.prototype)|e }}">
                 {% for item in form.items %}
-                    <li class="item">{{ _self.isel_prototype(item) }}</li>
+                    <li class="item">{{ _self.isel_prototype(item.itemcode) }}</li>
                 {% endfor %}
             </ul>
-{#
-                        <ul class="isel-item" data-prototype="{{ _self.isel_prototype(form.items.vars.prototype)|e }}">
-                            {% for item in form.items %}
-                               <li class="item">{{ _self.isel_prototype(item) }}</li>
-                            {% endfor %}
-                        </ul>
-#}
-            {#                     <ul class="isel-item">
-                                     {% for item in form.items %}
-                                         <li class="item">
-                                             <table class="table">
-                                                 <tr>
-                                                     <td class="isel_label">{{ form_widget(item) }}</td>
-                                                 </tr>
-                                             </table>
-                                         </li>
-                                     {% endfor %}
-                                 </ul>
-           #}
+            #}
+
+            {#             #}
+            <ul class="isel-item" data-prototype="{{ _self.isel_prototype(form.items.vars.prototype)|e }}">
+                {% for item in form.items %}
+                    <li class="item">
+                        <table class="table">
+                            <tr>
+                                <td class="isel_label">{{ form_label(item.itemcode) }} - {{ item.vars.value.itemcode }}</td>
+                                <td class="isel_widget">{{ form_widget(item.itemcode) }}{{ form_errors(item.itemcode) }}</td>
+                            </tr>
+                        </table>
+                    </li>
+                {% endfor %}
+            </ul>
 
         </div>
 
@@ -224,30 +217,6 @@
                 // add a new item form (see code block below)
                 addItemForm($collectionHolder, $newLink);
             });
-
-                /*
-                 var manager = window.Claroline.ResourceManager;
-
-                 //Add a ressource Picker event for the Clinical case (wiki)
-                 $('body').on('click', '.add-resource', function () {
-                 var resource = $(this).data('id');
-
-                 if (!manager.hasPicker('itemselectorResourcePicker')) {
-                 manager.createPicker('itemselectorResourcePicker', {
-                 callback: function (nodes) {
-                 var nodeId = _.keys(nodes)[0];
-                 addResource(resource, nodeId);
-                 },
-                 typeWhiteList: ['wiki'],
-                 restrictForOwner: true,
-                 isPickerMultiSelectAllowed: false,
-                 isDirectorySelectionAllowed: false
-                 }, true);
-                 } else {
-                 manager.picker('itemselectorResourcePicker', 'open');
-                 }
-                 });
-                 */
         });
 
         function addItemForm($collectionHolder, $newLink) {

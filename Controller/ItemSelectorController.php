@@ -59,7 +59,7 @@ class ItemSelectorController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-
+//echo '<pre>';var_dump($itemSelector->getItems()->get(0)->getItemcode()->getId());echo '</pre>';
             // remove the relationship between the item and the ItemSelector
             foreach ($originalItems as $item) {
 

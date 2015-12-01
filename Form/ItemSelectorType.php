@@ -34,7 +34,7 @@ class ItemSelectorType extends AbstractType
                         'attr' => array(
                             'data-is-picker-multi-select-allowed'   => 0,
                             'data-is-directory-selection-allowed'   => 0,
-                            'data-type-white-list'                   => 'icap_wiki',
+                            'data-type-white-list'                  => 'icap_wiki', //Todo : make it a parameter
                             /*'data-restrict-for-owner'               => 0,*/
                         ),
                         'label' => 'resource_to_open'
