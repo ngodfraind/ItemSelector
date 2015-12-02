@@ -1,0 +1,19 @@
+//Customize prototype & template
+http://stackoverflow.com/questions/7555702/how-to-customize-the-data-prototype-attribute-in-symfony-2-forms
+http://toni.uebernickel.info/2012/03/15/an-example-of-symfony2-collectiontype-form-field-prototype.html
+
+//customize request
+http://www.developpez.net/forums/d1264028/php/bibliotheques-frameworks/symfony/symfony2/form-realiser-simple-formulaire-entity-field-type/
+http://stackoverflow.com/questions/8456298/custom-query-in-entity-field-type
+
+http://stackoverflow.com/questions/15199784/symfony2-passing-values-to-collection-form-type
+
+http://stackoverflow.com/questions/11999745/how-to-set-up-default-value-in-symfony2-select-box-with-data-from-database/12000289#12000289
+
+//nested form prototypes
+http://stackoverflow.com/questions/16487129/symfony2-multiple-nested-forms-prototype
+https://www.youtube.com/watch?v=RVvRNlhpIaQ
+
+
+Controller et FormItem
+http://symfony.com/doc/current/reference/forms/types/collection.html#by-reference

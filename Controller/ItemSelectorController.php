@@ -52,6 +52,19 @@ class ItemSelectorController extends Controller
             $originalItems->add($item);
         }
 
+        /*
+         * Begin dummy init
+         */
+        $item1 = new Item();
+        $item1->setItemcode(52);
+        $item2 = new Item();
+        $item2->setItemcode(58);
+        $itemSelector->addItem($item1);
+        $itemSelector->addItem($item2);
+        /*
+         * End dummy init
+         */
+
         //working because call to service_container in controller.yml
         $form = $this->get('form.factory')
             ->create(new ItemSelectorType(), $itemSelector);
