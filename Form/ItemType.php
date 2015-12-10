@@ -2,8 +2,6 @@
 
 namespace CPASimUSante\ItemSelectorBundle\Form;
 
-use CPASimUSante\ItemSelectorBundle\Repository\ItemSelectorResourceNodeRepository;
-use CPASimUSante\ItemSelectorBundle\Repository\ItemSelectorExerciseRepository;
 use Claroline\CoreBundle\Repository\ResourceNodeRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -21,7 +19,7 @@ class ItemType extends AbstractType
      */
     private $namePattern;
 
-    public function __construct($resourceType = 'ujm_exercice', $namePattern = 'ecn-%')
+    public function __construct($resourceType = 18, $namePattern = 'ecn-%')
     {
         //not used yet
         $this->resourceType = $resourceType;
@@ -35,20 +33,28 @@ class ItemType extends AbstractType
     {
         $resourceType   = $this->resourceType;
         $namePattern    = $this->namePattern;
+        $orderedBy      = 'name';
 
         $builder
             ->add(
-                'resourceNode', 'entity', array(
+                'resourceNode', 'entity', [
                     'label'         => 'Code',
                     'class'         => 'ClarolineCoreBundle:Resource\ResourceNode',
                     'choice_label'  => 'name',
                     'empty_value'   => 'Choisissez un item',
-                    'query_builder' => function(ResourceNodeRepository $er) use ($resourceType, $namePattern) {
-                        $qb = $er->createQueryBuilder('rn');
-
+                    'query_builder' => function(ResourceNodeRepository $er) use ($resourceType, $namePattern, $orderedBy) {
+                        $qb = $er->createQueryBuilder('rn')
+                            ->where('rn.resourceType = :resourcetype')
+                            ->setParameter('resourcetype', $resourceType);
+                        if ($namePattern != '')
+                        {
+                            $qb->andWhere('rn.name LIKE :namePattern')
+                                ->setParameter('namePattern', $namePattern);
+                        }
+                        $qb->orderBy('rn.'.$orderedBy, 'ASC');
                         return $qb;
                     }
-                )
+                ]
             );
     }
     
