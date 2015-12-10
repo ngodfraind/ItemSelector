@@ -23,6 +23,7 @@ class ItemType extends AbstractType
 
     public function __construct($resourceType = 'ujm_exercice', $namePattern = 'ecn-%')
     {
+        //not used yet
         $this->resourceType = $resourceType;
         $this->namePattern = $namePattern;
     }
@@ -43,11 +44,7 @@ class ItemType extends AbstractType
                     'choice_label'  => 'name',
                     'empty_value'   => 'Choisissez un item',
                     'query_builder' => function(ResourceNodeRepository $er) use ($resourceType, $namePattern) {
-                        $qb = $er->createQueryBuilder('rn')
-                            //->join('rn.resourceType', 'type')
-                            //->where('type.name LIKE :type')
-                            //->setParameter('type', '%' . $resourceType . '%')
-                        ;
+                        $qb = $er->createQueryBuilder('rn');
 
                         return $qb;
                     }
