@@ -25,9 +25,10 @@ class Item
     /**
      * @var string
      *
-     * @ORM\Column(name="itemcode", type="integer")
+     * @ORM\ManyToOne(targetEntity="Claroline\CoreBundle\Entity\Resource\ResourceNode")
+     * @ORM\JoinColumn(name="resource_node_id", referencedColumnName="id")
      */
-    protected $itemcode;
+    protected $resourceNode;
 
     /**
      * @var ItemSelector
@@ -54,9 +55,9 @@ class Item
      *
      * @return Item
      */
-    public function setItemcode($itemcode)
+    public function setResourceNode($resourceNode)
     {
-        $this->itemcode = $itemcode;
+        $this->resourceNode = $resourceNode;
 
         return $this;
     }
@@ -66,9 +67,9 @@ class Item
      *
      * @return string
      */
-    public function getItemcode()
+    public function getResourceNode()
     {
-        return $this->itemcode;
+        return $this->resourceNode;
     }
 
     /**
