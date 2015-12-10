@@ -4,6 +4,7 @@ namespace CPASimUSante\ItemSelectorBundle\Form;
 
 use CPASimUSante\ItemSelectorBundle\Repository\ItemSelectorResourceNodeRepository;
 use CPASimUSante\ItemSelectorBundle\Repository\ItemSelectorExerciseRepository;
+use Claroline\CoreBundle\Repository\ResourceNodeRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -20,7 +21,7 @@ class ItemType extends AbstractType
      */
     private $namePattern;
 
-    public function __construct($resourceType = 18, $namePattern = 'ecn-%')
+    public function __construct($resourceType = 'ujm_exercice', $namePattern = 'ecn-%')
     {
         $this->resourceType = $resourceType;
         $this->namePattern = $namePattern;
@@ -36,13 +37,19 @@ class ItemType extends AbstractType
 
         $builder
             ->add(
-                'itemcode', 'entity', array(
+                'resourceNode', 'entity', array(
                     'label'         => 'Code',
-                    'class'         => 'CPASimUSanteItemSelectorBundle:ItemSelectorResourceNode',
-                    'choice_label'  =>'name',
+                    'class'         => 'ClarolineCoreBundle:Resource\ResourceNode',
+                    'choice_label'  => 'name',
                     'empty_value'   => 'Choisissez un item',
-                    'query_builder' => function(ItemSelectorResourceNodeRepository $er) use ($resourceType, $namePattern) {
-                        return $er->getQbFilteredBy($resourceType, $namePattern);
+                    'query_builder' => function(ResourceNodeRepository $er) use ($resourceType, $namePattern) {
+                        $qb = $er->createQueryBuilder('rn')
+                            //->join('rn.resourceType', 'type')
+                            //->where('type.name LIKE :type')
+                            //->setParameter('type', '%' . $resourceType . '%')
+                        ;
+
+                        return $qb;
                     }
                 )
             );

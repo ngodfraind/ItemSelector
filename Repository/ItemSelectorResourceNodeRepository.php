@@ -15,18 +15,21 @@ class ItemSelectorResourceNodeRepository extends ResourceNodeRepository
      * @param string $orderedBy
      * @return array|\Doctrine\ORM\Query
      */
-    public function getQbFilteredBy($resourcetype=18, $itemname='', $orderedBy = 'name')
+    public function getQbFilteredBy($type = 'ujm_exercise', $itemname='', $orderedBy = 'name')
     {
+        var_dump($type);
         $qb = $this->_em->createQueryBuilder()
             ->select('rn')
             ->from('Claroline\CoreBundle\Entity\Resource\ResourceNode', 'rn')
-            ->where('rn.resourceType = :resourcetype')
-            ->setParameter('resourcetype', $resourcetype);
+            ->join('rn.resourceType', 'type')
+            ->where('type.name LIKE :type')
+            ->setParameter('type', '%' . $type . '%');
+        /*
         if ($itemname != '')
         {
             $qb->andWhere('rn.name LIKE :itemname')
                 ->setParameter('itemname', $itemname);
-        }
+        }*/
         $qb->orderBy('rn.'.$orderedBy, 'ASC');
         return $qb;
     }

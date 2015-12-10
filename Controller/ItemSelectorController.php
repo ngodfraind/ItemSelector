@@ -46,47 +46,10 @@ class ItemSelectorController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        // Create an ArrayCollection of the current Item objects in the database
-        $originalItems = new ArrayCollection();
-        foreach ($itemSelector->getItems() as $item) {
-            $originalItems->add($item);
-        }
-
-        /*
-         * Begin dummy init
-         */
-        $item1 = new Item();
-        $item1->setItemcode(52);
-        $item2 = new Item();
-        $item2->setItemcode(58);
-        $itemSelector->addItem($item1);
-        $itemSelector->addItem($item2);
-        /*
-         * End dummy init
-         */
-
-        //working because call to service_container in controller.yml
-        $form = $this->get('form.factory')
-            ->create(new ItemSelectorType(), $itemSelector);
-
+        $form = $this->get('form.factory')->create(new ItemSelectorType(), $itemSelector);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-//echo '<pre>';var_dump($itemSelector->getItems()->get(0)->getItemcode()->getId());echo '</pre>';
-            // remove the relationship between the item and the ItemSelector
-            foreach ($originalItems as $item) {
-
-                if (false === $itemSelector->getItems()->contains($item)) {
-
-                    // in a a many-to-one relationship, remove the relationship
-                    $item->setItemSelector(null);
-
-                    $em->persist($item);
-
-                    // to delete the Item entirely, you can also do that
-                    $em->remove($item);
-                }
-            }
             $em->persist($itemSelector);
             $em->flush();
         }

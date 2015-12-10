@@ -13,8 +13,8 @@
 {% macro isel_prototype(form) %}
     <table class="table">
         <tr>
-            <td class="isel_label">{{ form_label(form.itemcode) }}</td>
-            <td class="isel_widget">{{ form_widget(form.itemcode) }}{{ form_errors(form.itemcode) }}</td>
+            <td class="isel_label">{{ form_label(form.resourceNode) }}</td>
+            <td class="isel_widget">{{ form_widget(form.resourceNode) }}{{ form_errors(form.resourceNode) }}</td>
         </tr>
     </table>
 {% endmacro %}
@@ -82,8 +82,8 @@
                     <li class="item">
                         <table class="table">
                             <tr>
-                                <td class="isel_label">{{ form_label(item.itemcode) }} - {{ item.vars.value.itemcode }}</td>
-                                <td class="isel_widget">{{ form_widget(item.itemcode) }}{{ form_errors(item.itemcode) }}</td>
+                                <td class="isel_label">{{ form_label(item.resourceNode) }} - {{ item.vars.value.resourceNode }}</td>
+                                <td class="isel_widget">{{ form_widget(item.resourceNode) }}{{ form_errors(item.resourceNode) }}</td>
                             </tr>
                         </table>
                     </li>
