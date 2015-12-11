@@ -17,3 +17,19 @@ https://www.youtube.com/watch?v=RVvRNlhpIaQ
 
 Controller et FormItem
 http://symfony.com/doc/current/reference/forms/types/collection.html#by-reference
+
+
+Override :
+Pour Entité : nécessite une mapped-superclass
+Sinon, c'est impossible :(
+https://github.com/symfony/symfony-docs/issues/735
+http://blog.nicolashachet.com/niveaux/confirme/surcharger-vos-entites-doctrine-en-symfony-2-exemple-avec-le-fosuserbundle/
+
+CPASimUSanteItemSelectorBundle.php
+public function getParent()
+{
+    return 'ClarolineCoreBundle';
+}
+
+    {#
+    //http://stackoverflow.com/questions/3982422/full-screen-iframe #}

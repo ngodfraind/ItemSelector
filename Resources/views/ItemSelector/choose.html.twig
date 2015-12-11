@@ -14,7 +14,8 @@
     <table class="table">
         <tr>
             <td class="isel_label">{{ form_label(form.resourceNode) }}</td>
-            <td class="isel_widget">{{ form_widget(form.resourceNode) }}{{ form_errors(form.resourceNode) }}</td>
+            <td class="isel_widget">{{ form_widget(form.resourceNode) }}</td>
+            <td class="isel_widget">{{ form_errors(form.resourceNode) }}</td>
         </tr>
     </table>
 {% endmacro %}
@@ -22,7 +23,6 @@
 {% macro tabs(inc) %}
     <li><a href="#" data-id="{{ inc }}" class="dfasmtab">Exercice {{ inc }}</a></li>
 {% endmacro %}
-
 {#
     tabcontent(inc, datacode)
     - inc : iframe id
@@ -44,49 +44,10 @@
         <div class="panel-body" id="text_content">
             {{ form_row(form.resource) }}
             <label class="control-label col-md-4">A quels items DFASM correspond-il ?</label>
-            {#
-    //Customize prototype & template
-            http://stackoverflow.com/questions/7555702/how-to-customize-the-data-prototype-attribute-in-symfony-2-forms
-            http://toni.uebernickel.info/2012/03/15/an-example-of-symfony2-collectiontype-form-field-prototype.html
 
-    //customize request
-    //http://www.developpez.net/forums/d1264028/php/bibliotheques-frameworks/symfony/symfony2/form-realiser-simple-formulaire-entity-field-type/
-    //http://stackoverflow.com/questions/8456298/custom-query-in-entity-field-type
-
-    //http://stackoverflow.com/questions/15199784/symfony2-passing-values-to-collection-form-type
-
-    //http://stackoverflow.com/questions/11999745/how-to-set-up-default-value-in-symfony2-select-box-with-data-from-database/12000289#12000289
-
-                        <ul class="isel-item"
-                            data-prototype="
-                                {% filter escape %}
-                                {{ include('CPASimUSanteItemSelectorBundle:Form:prototype.html.twig', { 'form': form.items.vars.prototype }) }}
-                                {% endfilter %}">
-
-                            {% for item in form.items %}
-                                {{ form_row(item) }}
-                            {% endfor %}
-                        </ul>
-                    #}
-{#
             <ul class="isel-item" data-prototype="{{ _self.isel_prototype(form.items.vars.prototype)|e }}">
                 {% for item in form.items %}
-                    <li class="item">{{ _self.isel_prototype(item.itemcode) }}</li>
-                {% endfor %}
-            </ul>
-            #}
-
-            {#             #}
-            <ul class="isel-item" data-prototype="{{ _self.isel_prototype(form.items.vars.prototype)|e }}">
-                {% for item in form.items %}
-                    <li class="item">
-                        <table class="table">
-                            <tr>
-                                <td class="isel_label">{{ form_label(item.resourceNode) }}</td>
-                                <td class="isel_widget">{{ form_widget(item.resourceNode) }}{{ form_errors(item.resourceNode) }}</td>
-                            </tr>
-                        </table>
-                    </li>
+                    <li class="item">{{ _self.isel_prototype(item) }}</li>
                 {% endfor %}
             </ul>
 
@@ -118,151 +79,24 @@
                 {% set tabcontent = "" %}
                 {% for item in form.items %}
                     {% set tabs = tabs ~ _self.tabs(loop.index) %}
-                    {#   {% set tabcontent = tabcontent ~ _self.tabcontent(loop.index, item.itemcode.vars.data) %} #}
+                    {% set tabcontent = tabcontent ~ _self.tabcontent(loop.index, item.resourceNode.vars.value) %}
                 {% endfor %}
                 <ul class="nav nav-tabs">{{ tabs | raw  }}</ul>
                 {{ tabcontent | raw  }}
             </div>
         </div>
     </div>
-    {#
-    //http://stackoverflow.com/questions/3982422/full-screen-iframe #}
+
 </div>
 {% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
-        <style>
-            .isel-item { list-style-type:none}
-
-            iframe {
-                display: block;                 /* iframes are inline by default */
-                height: 100vh !important;        /* Viewport-relative units */
-            }
-            .popout{
-                display: block; position: absolute; top: 10px; right: 10px; padding: 3px;
-            }
-            .popin{
-                position: fixed; top: 10px; right: 10px; padding: 3px; z-index: 10001; display: none;
-            }
-            .fullframe{position: relative}
-            .showfull {position: fixed;top: 0;left: 0;width:100%;height: 100vh;z-index: 10000}
-        </style>
-        <!--    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/cpasimusanteitemselector/css/itemselector.css') }}"> -->
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/cpasimusanteitemselector/css/itemselector.css') }}">
 {% endblock %}
 
 {% block javascripts %}
     {# Claroline JS #}
     {{ parent() }}
-    <script type="text/javascript">
-        $(document).ready(function() {
-
-         //iframe fullpage
-            $(".popout").on('click', function(){
-                $(".fullframe").css({"position":"fixed","top":0,"left":0,"width":"100%","height":"100%","background-color":"#FFFFFF","z-index":1e4})
-                $(this).hide();
-                $(".popin").show();
-            });
-            $(".popin").on('click', function(){
-                $(".fullframe").css({"position":"relative"})
-                $(this).hide();
-                $(".popout").show();
-            });
-
-            //tabs
-            function selecttab(i){
-                $(".dfasmcontent").hide();
-                if ($("#text_content-"+i)) {
-                    $("#text_content-"+i).show();
-                    $(".dfasmtab").parent().removeClass("active");
-                    $("a[data-id="+i+"]").parent().addClass("active");
-                }
-            }
-            selecttab(1);
-            $("#dfasm .nav-tabs a").on('click', function(e){
-                var id = $(this).attr("data-id");
-                selecttab(id);
-            });
-
-            //Show exercises
-            $('.show-exercices').on('click', function(){
-                $('#dfasm').toggle();
-            });
-
-            //maximize frame height
-            $(".activity-iframe").load(function() {
-                $(this).height( $(this).contents().find("html").height() );
-            });
-
-            var $collectionHolder = $('ul.isel-item');
-            var $addItemLink = $('<a href="#" class="add_item_link btn btn-info"><span class="fa fa-plus"></span> Ajouter un item</a>');
-            var $newLink = $('<li></li>').append($addItemLink);
-
-            // add a delete link to all of the existing Item form li elements
-            $collectionHolder.find('li.item').each(function() {
-                addItemFormDeleteLink(this);
-            });
-
-            // add the "add an item" anchor and li to the tags ul
-            $collectionHolder.append($newLink);
-
-            // count the current form inputs we have (e.g. 2), use that as the new
-            // index when inserting a new item (e.g. 2)
-            $collectionHolder.data('index', $collectionHolder.find(':input').length);
-
-            $addItemLink.on('click', function(e) {
-                // prevent the link from creating a "#" on the URL
-                e.preventDefault();
-
-                // add a new item form (see code block below)
-                addItemForm($collectionHolder, $newLink);
-            });
-        });
-
-        function addItemForm($collectionHolder, $newLink) {
-            // Get the data-prototype
-            var prototype = $collectionHolder.data('prototype');
-
-            // get the new index
-            var index = $collectionHolder.data('index');
-
-            // Replace '$$name$$' in the prototype's HTML to
-            // instead be a number based on how many items we have
-            var newForm = prototype.replace(/__name__/g, index);
-
-            // increase the index with one for the next item
-            $collectionHolder.data('index', index + 1);
-
-            // Display the form in the page in an li, before the "Add an Item" link li
-            var $newFormLi = $('<li class="item"></li>').append(newForm);
-
-            // also add a remove button, just for this example
-            //$newFormLi.append('<a href="#" class="remove-item btn btn-danger">x</a>');
-
-            $newLink.before($newFormLi);
-
-            // add a delete link to the new form
-            addItemFormDeleteLink($newFormLi);
-
-            // handle the removal
-            $('.remove-item').click(function(e) {
-                e.preventDefault();
-                $(this).parent().remove();
-                return false;
-            });
-        }
-
-        function addItemFormDeleteLink($itemFormLi) {
-            var $removeFormA = $('<td><a href="#" class="remove-item btn btn-danger"><span class="fa fa-trash"></span></a></td>');
-            $($itemFormLi).find("tr").append($removeFormA);
-
-            $($removeFormA).find("a").on('click', function(e) {
-                // prevent the link from creating a "#" on the URL
-                e.preventDefault();
-
-                // remove the li for the tag form
-                $itemFormLi.remove();
-            });
-        }
-    </script>
+    <script type="text/javascript" src='{{ asset('bundles/cpasimusanteitemselector/js/itemselector.js') }}'></script>
 {% endblock %}
