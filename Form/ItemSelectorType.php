@@ -9,6 +9,22 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class ItemSelectorType extends AbstractType
 {
     /**
+     * @var int the resource type (30 = Exercise)
+     */
+    private $resourceType;
+
+    /**
+     * @var string the pattern to filter the resource
+     */
+    private $namePattern;
+
+    public function __construct($resourceType, $namePattern = '')
+    {
+        $this->resourceType = $resourceType;
+        $this->namePattern = $namePattern;
+    }
+
+    /**
      * @param FormBuilderInterface $builder
      * @param array $options
      */
@@ -42,7 +58,7 @@ class ItemSelectorType extends AbstractType
                 )
                 ->add(
                     'items', 'collection', array(
-                        'type'          => new ItemType(),
+                        'type'          => new ItemType($this->resourceType, $this->namePattern),
                         'by_reference'  => false,
                         'prototype'     => true,
                         'allow_add'     => true,

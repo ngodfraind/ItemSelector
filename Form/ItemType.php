@@ -10,7 +10,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 class ItemType extends AbstractType
 {
     /**
-     * @var int the resource type (18 = Exercise)
+     * @var int the resource type ( Exercise)
      */
     private $resourceType;
 
@@ -19,9 +19,8 @@ class ItemType extends AbstractType
      */
     private $namePattern;
 
-    public function __construct($resourceType = 18, $namePattern = 'ecn-%')
+    public function __construct($resourceType, $namePattern = '')
     {
-        //not used yet
         $this->resourceType = $resourceType;
         $this->namePattern = $namePattern;
     }

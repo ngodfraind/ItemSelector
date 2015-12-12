@@ -46,7 +46,15 @@ class ItemSelectorController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $form = $this->get('form.factory')->create(new ItemSelectorType(), $itemSelector);
+        //TODO : add this in config
+        $resourceTypeEntity = $em->getRepository('ClarolineCoreBundle:Resource\ResourceType')
+            ->findOneByName('ujm_exercise');
+        //$resourceType = $em->getRepository('ClarolineCoreBundle:Resource\ResourceType')->findAll();
+        $resourceType = $resourceTypeEntity->getId();
+        $namePattern = 'ecn-%';
+
+        $form = $this->get('form.factory')
+            ->create(new ItemSelectorType($resourceType, $namePattern), $itemSelector);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
