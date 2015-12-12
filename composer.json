@@ -1,9 +1,17 @@
 {
     "name": "cpasimusante/item-selector-bundle",
+    "description": "SimUSante tool for picking resource items and displaying them",
     "keywords": ["Claroline", "Plugin"],
     "homepage": "http://www.claroline.net",
     "type": "claroline-plugin",
     "license": "GPL-3.0+",
+    "authors": [
+      {
+        "name": "SimUSante",
+        "email": "dechepy.olivier@chu-amiens.fr",
+        "homepage": "http://github.com/CPASimUSante"
+      }
+    ],
     "require": {
         "php": ">=5.4.1",
         "claroline/core-bundle": "~6.0"

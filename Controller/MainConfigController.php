@@ -3,6 +3,7 @@
 namespace CPASimUSante\ItemSelectorBundle\Controller;
 
 use CPASimUSante\ItemSelectorBundle\Entity\MainConfig;
+use CPASimUSante\ItemSelectorBundle\Exception\NoMainConfigException;
 use CPASimUSante\ItemSelectorBundle\Form\MainConfigType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration as EXT;
@@ -38,33 +39,37 @@ class MainConfigController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
+        $mainConfig = $this->getMainConfig();
+
         //working because call to service_container in controller.yml
         $form = $this->get('form.factory')
-            ->create(new MainConfigType(), new MainConfig());
+            ->create(new MainConfigType(), $mainConfig);
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $em->persist($mainConfig);
+            $em->flush();
+        }
 
         return array(
             'form'      => $form->createView(),
         );
     }
 
-    /**
-     * Configuration save
-     *
-     * @EXT\Route("/admin/submit", name="cpasimusante_itemselector_admin_submit", options={"expose"=true})
-     * @EXT\Template("CPASimUSanteItemSelectorBundle::config.html.twig")
-     */
-    public function adminSubmitAction()
+    public function getMainConfig()
     {
-        $form = $this->get('form.factory')
-            ->create(new MainConfigType());
-        $form->handleRequest($this->get('request'));
-
-        if ($form->isValid()) {
-            $this->get('claroline.config.platform_config_handler')->setParameter('video_player', $form->get('player')->getData());
-
-            return $this->redirect($this->generateUrl('claro_admin_plugins'));
+        try {
+            $mainConfig = $this->getDoctrine()
+                ->getManager()
+                ->getRepository('CPASimUSanteItemSelectorBundle:MainConfig')
+                ->findAll();
+            if (sizeof($mainConfig) == 0) {
+                throw new NoMainConfigException();
+            } else {
+                return $mainConfig[0];
+            }
+        } catch (NoMainConfigException $nme) {
+            return new MainConfig();
         }
-
-        return array('form_group' => $form->createView());
     }
 }

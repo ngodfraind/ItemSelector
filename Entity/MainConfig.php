@@ -3,6 +3,7 @@
 namespace CPASimUSante\ItemSelectorBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * MainConfig
@@ -22,22 +23,19 @@ class MainConfig
     private $id;
 
     /**
-     * Resource type to select
-     * @var \Claroline\CoreBundle\Entity\Resource\ResourceType
+     * @var Items[]
      *
-     * @ORM\ManyToOne(targetEntity="Claroline\CoreBundle\Entity\Resource\ResourceType", cascade={"persist"})
-     * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
+     * @ORM\OneToMany(targetEntity="CPASimUSante\ItemSelectorBundle\Entity\MainConfigItem", mappedBy="mainconfig", cascade={"all"})
      */
-    private $resourcetype;
+    protected $items;
 
     /**
-     * Workspace to apply
-     * @var \Claroline\CoreBundle\Entity\Workspace\Workspace
-     *
-     * @ORM\ManyToOne(targetEntity="Claroline\CoreBundle\Entity\Workspace\Workspace", cascade={"persist"})
-     * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
+     * Class constructor
      */
-    private $workspace;
+    public function __construct()
+    {
+        $this->items = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -49,52 +47,41 @@ class MainConfig
         return $this->id;
     }
 
-
     /**
-     * Set resourcetype
+     * Add item
      *
-     * @param \Claroline\CoreBundle\Entity\Resource\ResourceType $resourcetype
+     * @param \CPASimUSante\ItemSelectorBundle\Entity\MainConfigItem $item
      *
-     * @return MainConfig
+     * @return Mainconfig
      */
-    public function setResourcetype(\Claroline\CoreBundle\Entity\Resource\ResourceType $resourcetype = null)
+    public function addItem(\CPASimUSante\ItemSelectorBundle\Entity\MainConfigItem $item)
     {
-        $this->resourcetype = $resourcetype;
+        /*       $this->items[] = $item;
+               //$item->setItemselector($this);
+               return $this;
+       */
+        $item->setMainconfig($this);
 
-        return $this;
+        $this->items->add($item);
     }
 
     /**
-     * Get resourcetype
+     * Remove item
      *
-     * @return \Claroline\CoreBundle\Entity\Resource\ResourceType
+     * @param \CPASimUSante\ItemSelectorBundle\Entity\MainConfigItem $item
      */
-    public function getResourcetype()
+    public function removeItem(\CPASimUSante\ItemSelectorBundle\Entity\MainConfigItem $item)
     {
-        return $this->resourcetype;
+        $this->items->removeElement($item);
     }
 
     /**
-     * Set workspace
+     * Get items
      *
-     * @param \Claroline\CoreBundle\Entity\Workspace\Workspace $workspace
-     *
-     * @return MainConfig
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function setWorkspace(\Claroline\CoreBundle\Entity\Workspace\Workspace $workspace = null)
+    public function getItems()
     {
-        $this->workspace = $workspace;
-
-        return $this;
-    }
-
-    /**
-     * Get workspace
-     *
-     * @return \Claroline\CoreBundle\Entity\Workspace\Workspace
-     */
-    public function getWorkspace()
-    {
-        return $this->workspace;
+        return $this->items;
     }
 }

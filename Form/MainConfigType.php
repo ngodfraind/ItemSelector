@@ -15,16 +15,15 @@ class MainConfigType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('resourcetype', 'entity', array(
-                'label'         => 'Type',
-                'class'         => 'Claroline\CoreBundle\Entity\Resource\ResourceType',
-                'choice_label'  =>'name',
-            ))
-            ->add('workspace', 'entity', array(
-                'label'         => 'Workspace',
-                'class'         => 'Claroline\CoreBundle\Entity\Workspace\Workspace',
-                'choice_label'  =>'name',
-            ))
+            ->add(
+                'items', 'collection', array(
+                    'type'          => new MainConfigItemType(),
+                    'by_reference'  => false,
+                    'prototype'     => true,
+                    'allow_add'     => true,
+                    'allow_delete'  => true,
+                )
+            )
         ;
     }
     

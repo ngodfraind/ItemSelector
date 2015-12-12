@@ -40,7 +40,7 @@
     });
 
     var itemCount = $('ul.isel-item li') ? $('ul.isel-item li').length : 0;
-    var itemCountMax = 3;
+    var itemCountMax = 3;   /*TODO : add this in config */
     var $collectionHolder = $('ul.isel-item');
     var $addItemLink = $('<a href="#" class="add_item_link btn btn-info"><span class="fa fa-plus"></span> Ajouter un item</a>');
     var $newLink = $('<li></li>').append($addItemLink);
@@ -61,7 +61,7 @@
         // prevent the link from creating a "#" on the URL
         e.preventDefault();
 
-        if (itemCountMax > 0 && itemCount < itemCountMax)
+        if (itemCount < itemCountMax)
         {
             itemCount++;
             // add a new item form

@@ -46,12 +46,11 @@ class ItemSelectorController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        //TODO : add this in config
-        $resourceTypeEntity = $em->getRepository('ClarolineCoreBundle:Resource\ResourceType')
-            ->findOneByName('ujm_exercise');
-        //$resourceType = $em->getRepository('ClarolineCoreBundle:Resource\ResourceType')->findAll();
-        $resourceType = $resourceTypeEntity->getId();
-        $namePattern = 'ecn-%';
+        //retrieve ItemSelector configuration for this WS
+        $config = $this->getConfig($itemSelector->getResource()->getWorkspace()->getId());
+
+        $resourceType = $config['resourceType'];
+        $namePattern = $config['namePattern'];
 
         $form = $this->get('form.factory')
             ->create(new ItemSelectorType($resourceType, $namePattern), $itemSelector);
@@ -65,6 +64,33 @@ class ItemSelectorController extends Controller
         return array(
             '_resource' => $itemSelector,
             'form'      => $form->createView(),
+            'itemCount' => $config['itemCount'],
         );
+    }
+
+    private function getConfig($workspace){
+        $em = $this->getDoctrine()->getManager();
+        $res = $em->getRepository('CPASimUSanteItemSelectorBundle:MainConfigItem')
+            ->findOneByWorkspace($workspace);
+        //Default configuration
+        if (null == $res)
+        {
+            $defaultResourceType = $em->getRepository('ClarolineCoreBundle:Resource\ResourceType')
+                ->findOneByName('file');
+            $config = array(
+                'itemCount' => 3,
+                'namePattern' => '',
+                'resourceType' => $defaultResourceType->getId(),
+            );
+        }
+        else
+        {
+            $config = array(
+                'itemCount' => $res->getItemCount(),
+                'namePattern' => $res->getNamePattern(),
+                'resourceType' => $res->getResourceType()->getId(),
+            );
+        }
+        return $config;
     }
 }
