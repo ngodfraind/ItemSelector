@@ -53,7 +53,7 @@ class ItemSelectorController extends Controller
         }
 
         //retrieve ItemSelector configuration for this WS
-        $config = $this->getConfig($itemSelector->getResource()->getWorkspace()->getId());
+        $config = $this->getConfig($itemSelector->getResourceNode()->getWorkspace()->getId());
 
         $mainResourceType = $config['mainResourceType'];
         $resourceType = $config['resourceType'];

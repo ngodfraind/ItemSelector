@@ -23,7 +23,7 @@ class ItemSelectorType extends AbstractType
      */
     private $namePattern;
 
-    public function __construct($mainResourceType, $resourceType, $namePattern = '')
+    public function __construct($mainResourceType='', $resourceType='', $namePattern = '')
     {
         $this->mainResourceType = $mainResourceType;
         $this->resourceType     = $resourceType;

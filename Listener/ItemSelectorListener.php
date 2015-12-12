@@ -113,37 +113,6 @@ class ItemSelectorListener extends ContainerAware
      */
     public function onAdministrate(PluginOptionsEvent $event)
     {
-        /*
-        //retrieve the plugin manager with its Service name
-        $pluginManager = $this->container
-            ->get("cpasimusante_itemselector.manager.plugin.itemselector");
-   //     $form = $pluginManager->getPluginConfigForm();
-
-        $content = $this->container
-            ->get('templating')
-            ->render(
-                'CPASimUSanteItemSelectorBundle::config.html.twig',
-                array(
-                    //'form' => $form->createView()
-                )
-            );
-        //PluginOptionsEvent require a setResponse()
-        $event->setResponse(new Response($content));
-        $event->stopPropagation();
-        */
-
-        /*
-        $route = $this->container
-            ->get('router')
-            ->generate(
-                'cpasimusante_mainconfig',
-                array(
-                )
-            );
-        $event->setResponse(new RedirectResponse($route));
-        $event->stopPropagation();
-        */
-
         $requestStack = $this->container->get('request_stack');
         $httpKernel = $this->container->get('http_kernel');
         $request = $requestStack->getCurrentRequest();
