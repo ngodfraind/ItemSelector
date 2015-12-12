@@ -39,6 +39,8 @@
         $(this).height( $(this).contents().find("html").height() );
     });
 
+    var itemCount = $('ul.isel-item li') ? $('ul.isel-item li').length : 0;
+    var itemCountMax = 3;
     var $collectionHolder = $('ul.isel-item');
     var $addItemLink = $('<a href="#" class="add_item_link btn btn-info"><span class="fa fa-plus"></span> Ajouter un item</a>');
     var $newLink = $('<li></li>').append($addItemLink);
@@ -59,53 +61,57 @@
         // prevent the link from creating a "#" on the URL
         e.preventDefault();
 
-        // add a new item form (see code block below)
-        addItemForm($collectionHolder, $newLink);
+        if (itemCountMax > 0 && itemCount < itemCountMax)
+        {
+            itemCount++;
+            // add a new item form
+            addItemForm($collectionHolder, $newLink);
+        }
     });
+
+    function addItemForm($collectionHolder, $newLink) {
+        // Get the data-prototype
+        var prototype = $collectionHolder.data('prototype');
+
+        // get the new index
+        var index = $collectionHolder.data('index');
+
+        // Replace '$$name$$' in the prototype's HTML to
+        // instead be a number based on how many items we have
+        var newForm = prototype.replace(/__name__/g, index);
+
+        // increase the index with one for the next item
+        $collectionHolder.data('index', index + 1);
+
+        // Display the form in the page in an li, before the "Add an Item" link li
+        var $newFormLi = $('<li class="item"></li>').append(newForm);
+
+        // also add a remove button, just for this example
+        //$newFormLi.append('<a href="#" class="remove-item btn btn-danger">x</a>');
+
+        $newLink.before($newFormLi);
+
+        // add a delete link to the new form
+        addItemFormDeleteLink($newFormLi);
+
+        // handle the removal
+        $('.remove-item').click(function(e) {
+            e.preventDefault();
+            $(this).parent().remove();
+            return false;
+        });
+    }
+
+    function addItemFormDeleteLink($itemFormLi) {
+        var $removeFormA = $('<td><a href="#" class="remove-item btn btn-danger"><span class="fa fa-trash"></span></a></td>');
+        $($itemFormLi).find("tr").append($removeFormA);
+
+        $($removeFormA).find("a").on('click', function(e) {
+            // prevent the link from creating a "#" on the URL
+            e.preventDefault();
+            itemCount--;
+            // remove the li for the tag form
+            $itemFormLi.remove();
+        });
+    }
 }());
-
-function addItemForm($collectionHolder, $newLink) {
-    // Get the data-prototype
-    var prototype = $collectionHolder.data('prototype');
-
-    // get the new index
-    var index = $collectionHolder.data('index');
-
-    // Replace '$$name$$' in the prototype's HTML to
-    // instead be a number based on how many items we have
-    var newForm = prototype.replace(/__name__/g, index);
-
-    // increase the index with one for the next item
-    $collectionHolder.data('index', index + 1);
-
-    // Display the form in the page in an li, before the "Add an Item" link li
-    var $newFormLi = $('<li class="item"></li>').append(newForm);
-
-    // also add a remove button, just for this example
-    //$newFormLi.append('<a href="#" class="remove-item btn btn-danger">x</a>');
-
-    $newLink.before($newFormLi);
-
-    // add a delete link to the new form
-    addItemFormDeleteLink($newFormLi);
-
-    // handle the removal
-    $('.remove-item').click(function(e) {
-        e.preventDefault();
-        $(this).parent().remove();
-        return false;
-    });
-}
-
-function addItemFormDeleteLink($itemFormLi) {
-    var $removeFormA = $('<td><a href="#" class="remove-item btn btn-danger"><span class="fa fa-trash"></span></a></td>');
-    $($itemFormLi).find("tr").append($removeFormA);
-
-    $($removeFormA).find("a").on('click', function(e) {
-        // prevent the link from creating a "#" on the URL
-        e.preventDefault();
-
-        // remove the li for the tag form
-        $itemFormLi.remove();
-    });
-}
