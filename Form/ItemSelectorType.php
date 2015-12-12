@@ -9,7 +9,12 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class ItemSelectorType extends AbstractType
 {
     /**
-     * @var int the resource type (30 = Exercise)
+     * @var int the main resource type
+     */
+    private $mainResourceType;
+
+    /**
+     * @var int the item resource type
      */
     private $resourceType;
 
@@ -18,10 +23,11 @@ class ItemSelectorType extends AbstractType
      */
     private $namePattern;
 
-    public function __construct($resourceType, $namePattern = '')
+    public function __construct($mainResourceType, $resourceType, $namePattern = '')
     {
-        $this->resourceType = $resourceType;
-        $this->namePattern = $namePattern;
+        $this->mainResourceType = $mainResourceType;
+        $this->resourceType     = $resourceType;
+        $this->namePattern      = $namePattern;
     }
 
     /**
@@ -50,7 +56,7 @@ class ItemSelectorType extends AbstractType
                         'attr' => array(
                             'data-is-picker-multi-select-allowed'   => 0,
                             'data-is-directory-selection-allowed'   => 0,
-                            'data-type-white-list'                  => 'icap_wiki', //Todo : make it a parameter
+                            'data-type-white-list'                  => $this->mainResourceType,
                             /*'data-restrict-for-owner'               => 0,*/
                         ),
                         'label' => 'resource_to_open'

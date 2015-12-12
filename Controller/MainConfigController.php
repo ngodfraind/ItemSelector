@@ -8,6 +8,7 @@ use CPASimUSante\ItemSelectorBundle\Form\MainConfigType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration as EXT;
 use Symfony\Component\HttpFoundation\Request;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Class MainConfigController
@@ -41,12 +42,28 @@ class MainConfigController extends Controller
 
         $mainConfig = $this->getMainConfig();
 
+        // Create an ArrayCollection of the current Item objects in the database
+        $originalItems = new ArrayCollection();
+        foreach ($mainConfig->getItems() as $item) {
+            $originalItems->add($item);
+        }
+
         //working because call to service_container in controller.yml
         $form = $this->get('form.factory')
             ->create(new MainConfigType(), $mainConfig);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
+            // remove the relationship between the item and the ItemSelector
+            foreach ($originalItems as $item) {
+                if (false === $mainConfig->getItems()->contains($item)) {
+                    // in a a many-to-one relationship, remove the relationship
+                    $item->setMainconfig(null);
+                    $em->persist($item);
+                    // to delete the Item entirely, you can also do that
+                    $em->remove($item);
+                }
+            }
             $em->persist($mainConfig);
             $em->flush();
         }

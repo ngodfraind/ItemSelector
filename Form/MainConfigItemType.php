@@ -15,8 +15,14 @@ class MainConfigItemType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('resourcetype', 'entity', array(
-                'label'         => 'Type',
+            ->add('mainResourceType', 'entity', array(
+                'label'         => 'Ressource principale',
+                'empty_value'   => 'Choisissez une ressource',
+                'class'         => 'Claroline\CoreBundle\Entity\Resource\ResourceType',
+                'choice_label'  =>'name',
+            ))
+            ->add('resourceType', 'entity', array(
+                'label'         => 'Type d\'item',
                 'class'         => 'Claroline\CoreBundle\Entity\Resource\ResourceType',
                 'choice_label'  =>'name',
             ))
@@ -32,7 +38,7 @@ class MainConfigItemType extends AbstractType
             ))
             ->add('itemCount', 'integer', array(
                 'empty_data'    => 3,
-                'label'         => 'Maximum items',
+                'label'         => 'Nombre maximum d\'items',
             ))
         ;
     }

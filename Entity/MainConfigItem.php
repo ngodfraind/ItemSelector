@@ -42,7 +42,16 @@ class MainConfigItem
      * @ORM\ManyToOne(targetEntity="Claroline\CoreBundle\Entity\Resource\ResourceType", cascade={"persist"})
      * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
      */
-    private $resourcetype;
+    private $resourceType;
+
+    /**
+     * Main resource type to select
+     * @var \Claroline\CoreBundle\Entity\Resource\ResourceType
+     *
+     * @ORM\ManyToOne(targetEntity="Claroline\CoreBundle\Entity\Resource\ResourceType", cascade={"persist"})
+     * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
+     */
+    private $mainResourceType;
 
     /**
      * Workspace to apply
@@ -118,27 +127,51 @@ class MainConfigItem
     }
 
     /**
-     * Set resourcetype
+     * Set resourceType
      *
-     * @param \Claroline\CoreBundle\Entity\Resource\ResourceType $resourcetype
+     * @param \Claroline\CoreBundle\Entity\Resource\ResourceType $resourceType
      *
      * @return MainConfigItem
      */
-    public function setResourcetype(\Claroline\CoreBundle\Entity\Resource\ResourceType $resourcetype = null)
+    public function setResourceType(\Claroline\CoreBundle\Entity\Resource\ResourceType $resourceType = null)
     {
-        $this->resourcetype = $resourcetype;
+        $this->resourceType = $resourceType;
 
         return $this;
     }
 
     /**
-     * Get resourcetype
+     * Get resourceType
      *
      * @return \Claroline\CoreBundle\Entity\Resource\ResourceType
      */
-    public function getResourcetype()
+    public function getResourceType()
     {
-        return $this->resourcetype;
+        return $this->resourceType;
+    }
+
+    /**
+     * Set mainResourceType
+     *
+     * @param \Claroline\CoreBundle\Entity\Resource\ResourceType $mainResourceType
+     *
+     * @return MainConfigItem
+     */
+    public function setMainResourceType(\Claroline\CoreBundle\Entity\Resource\ResourceType $mainResourceType = null)
+    {
+        $this->mainResourceType = $mainResourceType;
+
+        return $this;
+    }
+
+    /**
+     * Get mainResourceType
+     *
+     * @return \Claroline\CoreBundle\Entity\Resource\ResourceType
+     */
+    public function getMainResourceType()
+    {
+        return $this->mainResourceType;
     }
 
     /**

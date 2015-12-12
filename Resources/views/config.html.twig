@@ -3,14 +3,19 @@
 {% macro isel_prototype(form) %}
     <table class="table">
         <tr>
+            <td class="isel_label">{{ form_label(form.mainResourceType) }}</td>
+            <td class="isel_widget">{{ form_widget(form.mainResourceType) }}</td>
+            <td class="isel_widget">{{ form_errors(form.mainResourceType) }}</td>
+        </tr>
+        <tr>
             <td class="isel_label">{{ form_label(form.workspace) }}</td>
             <td class="isel_widget">{{ form_widget(form.workspace) }}</td>
             <td class="isel_widget">{{ form_errors(form.workspace) }}</td>
         </tr>
         <tr>
-            <td class="isel_label">{{ form_label(form.resourcetype) }}</td>
-            <td class="isel_widget">{{ form_widget(form.resourcetype) }}</td>
-            <td class="isel_widget">{{ form_errors(form.resourcetype) }}</td>
+            <td class="isel_label">{{ form_label(form.resourceType) }}</td>
+            <td class="isel_widget">{{ form_widget(form.resourceType) }}</td>
+            <td class="isel_widget">{{ form_errors(form.resourceType) }}</td>
         </tr>
         <tr>
             <td class="isel_label">{{ form_label(form.namePattern) }}</td>
