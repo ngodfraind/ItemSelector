@@ -39,7 +39,7 @@ class ItemSelectorType extends AbstractType
         $builder
             ->add(
                 'name', 'hidden', array(
-                    'data' => 'exercise'
+                    'data' => 'itemselector'
                 )
             )
             ->add(
